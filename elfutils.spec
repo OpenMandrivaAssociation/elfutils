@@ -1,6 +1,6 @@
 %define name	elfutils
-%define version	0.125
-%define release	%mkrel 2
+%define version	0.126
+%define release	%mkrel 1
 
 %define major	1
 %define libname	%mklibname %{name} %{major}
@@ -31,9 +31,9 @@ License:	GPL
 Group:		Development/Other
 Source0:	elfutils-%{version}.tar.gz
 Patch0:		elfutils-0.125-portability.patch
-Patch1:		elfutils-0.122-robustify.patch
+Patch1:		elfutils-0.126-robustify.patch
 Patch2:		elfutils-0.120-fix-sparc-build.patch
-Patch3:		elfutils-0.125-warn_unused_result.patch
+#Patch3:		elfutils-0.125-warn_unused_result.patch
 Patch4:		elfutils-0.124-strip-copy-symtab.patch
 Patch5:		elfutils-0.108-align.patch
 Patch6:		elfutils-0.123-fix-special-sparc-elf32-plt-entries.patch
@@ -119,7 +119,7 @@ find . \( -name configure -o -name config.h.in \) -print | xargs touch
 perl -pi -e '/AM_CFLAGS =/ and s/-Werror//g' ./tests/Makefile.{in,am}
 %patch1 -p1 -b .robustify
 %patch2 -p1 -b .sparc
-%patch3 -p0 -b .warn_unused_result
+#%patch3 -p0 -b .warn_unused_result
 %patch4 -p1 -b .strip_copy_symtab
 %patch5 -p1 -b .align
 %patch6 -p1 -b .sparc_elf32_plt
@@ -168,6 +168,7 @@ rm -rf %{buildroot}
 %defattr(-,root,root)
 %doc NOTES README NEWS TODO
 %{_bindir}/eu-addr2line
+%{_bindir}/eu-ar
 %{_bindir}/eu-elfcmp
 %{_bindir}/eu-findtextrel
 %{_bindir}/eu-elflint
