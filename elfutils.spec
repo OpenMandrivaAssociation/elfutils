@@ -1,5 +1,5 @@
 %define name	elfutils
-%define version	0.126
+%define version	0.127
 %define release	%mkrel 1
 
 %define major	1
@@ -30,8 +30,8 @@ Release:	%{release}
 License:	GPL
 Group:		Development/Other
 Source0:	elfutils-%{version}.tar.gz
-Patch0:		elfutils-0.125-portability.patch
-Patch1:		elfutils-0.126-robustify.patch
+Patch0:		elfutils-0.127-portability.patch
+Patch1:		elfutils-0.127-robustify.patch
 Patch2:		elfutils-0.120-fix-sparc-build.patch
 #Patch3:		elfutils-0.125-warn_unused_result.patch
 Patch4:		elfutils-0.124-strip-copy-symtab.patch
