@@ -1,11 +1,12 @@
 %define name	elfutils
 %define version	0.127
-%define release	%mkrel 1
+%define release	%mkrel 2
 
 %define major	1
 %define libname	%mklibname %{name} %{major}
+%define libnamedevel	%mklibname -d %{name}
+%define libnamestaticdevel	%mklibname -d %{name}-static
 
-%define _gnu	%{nil}
 %define _program_prefix eu-
 
 %ifarch %{sunsparc}
@@ -56,16 +57,18 @@ Elfutils is a collection of utilities, including:
    * %{_program_prefix}readelf: the see the raw ELF file structures
    * %{_program_prefix}elflint: to check for well-formed ELF files
 
-%package -n	%{libname}-devel
+%package -n	%{libnamedevel}
 Summary:	Development libraries to handle compiled objects
 Group:		Development/Other
 License:	GPL
 Requires:	%{libname} = %{version}-%{release}
 Provides:	%{name}-devel lib%{name}-devel
-Obsoletes:	libelf-devel libelf0-devel
+Obsoletes:	libelf-devel
+Obsoletes:  libelf0-devel
+Obsoletes:  %{_lib}%{name}1-devel
 Provides:	libelf-devel libelf0-devel
 
-%description -n	%{libname}-devel
+%description -n	%{libnamedevel}
 This package contains the headers and dynamic libraries to create
 applications for handling compiled objects.
 
@@ -74,16 +77,17 @@ applications for handling compiled objects.
    * libebl provides some higher-level ELF access functionality.
    * libasm provides a programmable assembler interface.
 
-%package -n	%{libname}-static-devel
+%package -n	%{libnamestaticdevel}
 Summary:	Static libraries for development with libelfutils
 Group:		Development/Other
 License:	GPL
-Requires:	%{libname}-devel = %{version}-%{release}
-Provides:	%{name}-static-devel lib%{name}-static-devel
+Requires:	%{libnamedevel} = %{version}-%{release}
+Provides:	%{name}-static-devel 
 Obsoletes:	libelf-static-devel libelf0-static-devel
 Provides:	libelf-static-devel libelf0-static-devel
+Obsoletes:  %{_lib}%{name}1-static-devel
 
-%description -n	%{libname}-static-devel
+%description -n	%{libnamestaticdevel}
 This package contains the static libraries to create applications for
 handling compiled objects.
 
@@ -184,7 +188,7 @@ rm -rf %{buildroot}
 %dir %{_libdir}/elfutils
 %{_libdir}/elfutils/lib*.so
 
-%files -n %{libname}-devel
+%files -n %{libnamedevel}
 %defattr(-,root,root)
 %{_includedir}/dwarf.h
 %{_includedir}/libelf.h
@@ -201,7 +205,7 @@ rm -rf %{buildroot}
 %{_libdir}/libelf.so
 %{_libdir}/libdw.so
 
-%files -n %{libname}-static-devel
+%files -n %{libnamestaticdevel}
 %defattr(-,root,root)
 #%{_libdir}/libasm.a
 %{_libdir}/libebl.a
@@ -216,5 +220,3 @@ rm -rf %{buildroot}
 #%{_libdir}/libasm*.so.*
 #%{_libdir}/libebl-%{version}.so
 #%{_libdir}/libebl*.so.*
-
-
