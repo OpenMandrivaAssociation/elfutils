@@ -31,13 +31,17 @@ Release:	%{release}
 License:	GPL
 Group:		Development/Other
 Source0:	ftp://sources.redhat.com/pub/systemtap/elfutils/elfutils-0.128.tar.bz2
-Patch0:		elfutils-0.127-portability.patch
-Patch1:		elfutils-0.127-robustify.patch
-Patch2:		elfutils-0.120-fix-sparc-build.patch
-#Patch3:		elfutils-0.125-warn_unused_result.patch
-Patch4:		elfutils-0.124-strip-copy-symtab.patch
-Patch5:		elfutils-0.108-align.patch
-Patch6:		elfutils-0.123-fix-special-sparc-elf32-plt-entries.patch
+# those 3 patches are from ftp://sources.redhat.com/pub/systemtap/elfutils/ 
+Patch0:		elfutils-portability.patch
+Patch1:		elfutils-robustify.patch
+Patch2:		elfutils-strip-copy-symtab.patch
+# mdv patches
+Patch3:		elfutils-0.120-fix-sparc-build.patch
+Patch4:		elfutils-0.108-align.patch
+Patch5:		elfutils-0.123-fix-special-sparc-elf32-plt-entries.patch
+Patch6:		%{name}-0.128-gnu_inline.patch
+Patch7:		%{name}-0.128-elflint.patch
+Patch8:		%{name}-0.128-libdwfl.patch
 Requires:	%{libname} = %{version}-%{release}
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 %if %{build_compat}
@@ -112,22 +116,24 @@ ELF, and machine-specific ELF handling.
 %setup -q
 %if %{build_compat}
 %patch0 -p1 -b .portability
-
 sleep 1
 find . \( -name Makefile.in -o -name aclocal.m4 \) -print | xargs touch
 sleep 1
 find . \( -name configure -o -name config.h.in \) -print | xargs touch
 %endif
+
 # Don't use -Werror with -Wformat=2 -std=gnu99 as %a[ won't be caught
 # as the GNU %a extension.
 perl -pi -e '/AM_CFLAGS =/ and s/-Werror//g' ./tests/Makefile.{in,am}
-%patch1 -p1 -b .robustify
-%patch2 -p1 -b .sparc
-#%patch3 -p0 -b .warn_unused_result
-%patch4 -p1 -b .strip_copy_symtab
-%patch5 -p1 -b .align
-%patch6 -p1 -b .sparc_elf32_plt
 
+%patch1 -p1 -b .robustify
+%patch2 -p1 -b .strip_copy_symtab
+%patch3 -p1 -b .sparc
+%patch4 -p1 -b .align
+%patch5 -p1 -b .sparc_elf32_plt
+%patch6 -p1 -b .inline
+%patch7 -p1 -b .erllint
+%patch8 -p1 -b .libdwfl_indef
 %build
 mkdir build-%{_target_platform}
 pushd build-%{_target_platform}
