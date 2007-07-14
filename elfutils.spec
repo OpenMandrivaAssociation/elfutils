@@ -1,6 +1,6 @@
 %define name	elfutils
-%define version	0.127
-%define release	%mkrel 2
+%define version	0.128
+%define release	%mkrel 1
 
 %define major	1
 %define libname	%mklibname %{name} %{major}
@@ -30,7 +30,7 @@ Version:	%{version}
 Release:	%{release}
 License:	GPL
 Group:		Development/Other
-Source0:	elfutils-%{version}.tar.gz
+Source0:	ftp://sources.redhat.com/pub/systemtap/elfutils/elfutils-0.128.tar.bz2
 Patch0:		elfutils-0.127-portability.patch
 Patch1:		elfutils-0.127-robustify.patch
 Patch2:		elfutils-0.120-fix-sparc-build.patch
