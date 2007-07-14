@@ -183,7 +183,7 @@ rm -rf %{buildroot}
 %{_bindir}/eu-elfcmp
 %{_bindir}/eu-findtextrel
 %{_bindir}/eu-elflint
-%{_bindir}/eu-strip
+%{_bindir}/eu-unstrip
 %{_bindir}/eu-nm
 %{_bindir}/eu-ranlib
 %{_bindir}/eu-readelf
