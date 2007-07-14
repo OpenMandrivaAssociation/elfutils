@@ -4,8 +4,8 @@
 
 %define major	1
 %define libname	%mklibname %{name} %{major}
-%define libnamedevel	%mklibname -d %{name}
-%define libnamestaticdevel	%mklibname -d %{name}-static
+%define libnamedevel %mklibname %{name} -d
+%define libnamestaticdevel %mklibname %{name} -d -s
 
 %define _program_prefix eu-
 
@@ -43,7 +43,6 @@ Patch6:		%{name}-0.128-gnu_inline.patch
 Patch7:		%{name}-0.128-elflint.patch
 Patch8:		%{name}-0.128-libdwfl.patch
 Requires:	%{libname} = %{version}-%{release}
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 %if %{build_compat}
 BuildRequires:	gcc >= 3.2
 %else
@@ -51,6 +50,7 @@ BuildRequires:	gcc >= 3.4
 %endif
 BuildRequires:	sharutils
 BuildRequires:	libtool-devel
+BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
 
 %description
 Elfutils is a collection of utilities, including:
@@ -68,8 +68,8 @@ License:	GPL
 Requires:	%{libname} = %{version}-%{release}
 Provides:	%{name}-devel lib%{name}-devel
 Obsoletes:	libelf-devel
-Obsoletes:  libelf0-devel
-Obsoletes:  %{_lib}%{name}1-devel
+Obsoletes:	libelf0-devel
+Obsoletes:	%{_lib}%{name}1-devel
 Provides:	libelf-devel libelf0-devel
 
 %description -n	%{libnamedevel}
@@ -89,7 +89,7 @@ Requires:	%{libnamedevel} = %{version}-%{release}
 Provides:	%{name}-static-devel 
 Obsoletes:	libelf-static-devel libelf0-static-devel
 Provides:	libelf-static-devel libelf0-static-devel
-Obsoletes:  %{_lib}%{name}1-static-devel
+Obsoletes:	%{_lib}%{name}1-static-devel
 
 %description -n	%{libnamestaticdevel}
 This package contains the static libraries to create applications for
@@ -122,10 +122,6 @@ sleep 1
 find . \( -name configure -o -name config.h.in \) -print | xargs touch
 %endif
 
-# Don't use -Werror with -Wformat=2 -std=gnu99 as %a[ won't be caught
-# as the GNU %a extension.
-perl -pi -e '/AM_CFLAGS =/ and s/-Werror//g' ./tests/Makefile.{in,am}
-
 %patch1 -p1 -b .robustify
 %patch2 -p1 -b .strip_copy_symtab
 %patch3 -p1 -b .sparc
@@ -134,6 +130,11 @@ perl -pi -e '/AM_CFLAGS =/ and s/-Werror//g' ./tests/Makefile.{in,am}
 %patch6 -p1 -b .inline
 %patch7 -p1 -b .erllint
 %patch8 -p1 -b .libdwfl_indef
+
+# Don't use -Werror with -Wformat=2 -std=gnu99 as %a[ won't be caught
+# as the GNU %a extension.
+perl -pi -e '/AM_CFLAGS =/ and s/-Werror//g' ./tests/Makefile.{in,am}
+
 %build
 mkdir build-%{_target_platform}
 pushd build-%{_target_platform}
