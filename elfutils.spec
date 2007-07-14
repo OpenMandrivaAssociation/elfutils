@@ -183,7 +183,7 @@ rm -rf %{buildroot}
 %{_bindir}/eu-elfcmp
 %{_bindir}/eu-findtextrel
 %{_bindir}/eu-elflint
-#%{_bindir}/eu-ld
+%{_bindir}/eu-strip
 %{_bindir}/eu-nm
 %{_bindir}/eu-ranlib
 %{_bindir}/eu-readelf
@@ -206,15 +206,11 @@ rm -rf %{buildroot}
 %{_includedir}/elfutils/libebl.h
 %{_includedir}/elfutils/libdw.h
 %{_includedir}/elfutils/libdwfl.h
-#%{_libdir}/libasm.so
-#%{_libdir}/libdwarf.so
-#%{_libdir}/libebl.so
 %{_libdir}/libelf.so
 %{_libdir}/libdw.so
 
 %files -n %{libnamestaticdevel}
 %defattr(-,root,root)
-#%{_libdir}/libasm.a
 %{_libdir}/libebl.a
 %{_libdir}/libelf.a
 %{_libdir}/libdw.a
@@ -222,8 +218,4 @@ rm -rf %{buildroot}
 %files -n %{libname}
 %defattr(-,root,root)
 %{_libdir}/libelf-%{version}.so
-%{_libdir}/libelf*.so.*
-#%{_libdir}/libasm-%{version}.so
-#%{_libdir}/libasm*.so.*
-#%{_libdir}/libebl-%{version}.so
-#%{_libdir}/libebl*.so.*
+%{_libdir}/libelf*.so.%{major}*
