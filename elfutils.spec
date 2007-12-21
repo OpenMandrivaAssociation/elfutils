@@ -50,6 +50,7 @@ BuildRequires:	gcc >= 3.4
 %endif
 BuildRequires:	sharutils
 BuildRequires:	libtool-devel
+BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
 
 %description
 Elfutils is a collection of utilities, including:
