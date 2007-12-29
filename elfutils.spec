@@ -30,7 +30,7 @@ Version:	%{version}
 Release:	%{release}
 License:	GPLv2+
 Group:		Development/Other
-Source0:	ftp://sources.redhat.com/pub/systemtap/elfutils/elfutils-0.128.tar.bz2
+Source0:	ftp://sources.redhat.com/pub/systemtap/elfutils/%{name}-%{version}.tar.bz2
 # those 3 patches are from ftp://sources.redhat.com/pub/systemtap/elfutils/ 
 Patch0:		elfutils-portability.patch
 Patch1:		elfutils-robustify.patch
