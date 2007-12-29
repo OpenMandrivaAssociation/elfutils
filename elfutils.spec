@@ -1,5 +1,5 @@
 %define name	elfutils
-%define version	0.128
+%define version	0.131
 %define release	%mkrel 1
 
 %define major	1
@@ -28,7 +28,7 @@ Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		%{name}
 Version:	%{version}
 Release:	%{release}
-License:	GPL
+License:	GPLv2+
 Group:		Development/Other
 Source0:	ftp://sources.redhat.com/pub/systemtap/elfutils/elfutils-0.128.tar.bz2
 # those 3 patches are from ftp://sources.redhat.com/pub/systemtap/elfutils/ 
