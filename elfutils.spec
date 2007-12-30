@@ -1,8 +1,4 @@
-%define name	elfutils
-%define version	0.131
-%define release	%mkrel 1
-
-%define major	1
+%define major 1
 %define libname	%mklibname %{name} %{major}
 %define libnamedevel %mklibname %{name} -d
 %define libnamestaticdevel %mklibname %{name} -d -s
@@ -25,13 +21,15 @@
 %{expand: %{?_with_COMPAT:	%%global build_compat 1}}
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
-Name:		%{name}
-Version:	%{version}
-Release:	%{release}
+Name:		elfutils
+Version:	0.131
+Release:	%mkrel 1
 License:	GPLv2+
 Group:		Development/Other
 Source0:	ftp://sources.redhat.com/pub/systemtap/elfutils/%{name}-%{version}.tar.bz2
-# those 3 patches are from ftp://sources.redhat.com/pub/systemtap/elfutils/ 
+Source1:	testfile16.symtab.bz2
+Source2:	testfile16.symtab.debug.bz2
+# these 3 patches are from ftp://sources.redhat.com/pub/systemtap/elfutils/ 
 Patch0:		elfutils-portability.patch
 Patch1:		elfutils-robustify.patch
 Patch2:		elfutils-strip-copy-symtab.patch
@@ -39,17 +37,19 @@ Patch2:		elfutils-strip-copy-symtab.patch
 Patch3:		elfutils-0.120-fix-sparc-build.patch
 Patch4:		elfutils-0.108-align.patch
 Patch5:		elfutils-0.123-fix-special-sparc-elf32-plt-entries.patch
-Patch6:		%{name}-0.128-gnu_inline.patch
+Patch6:		gnu_inline.diff
 Patch7:		%{name}-0.128-elflint.patch
-Patch8:		%{name}-0.128-libdwfl.patch
+Patch9:		pointer_cast.diff
+Patch10:	readelf_subelf.diff
+Patch11:	unaligned.diff
 Requires:	%{libname} = %{version}-%{release}
 %if %{build_compat}
 BuildRequires:	gcc >= 3.2
 %else
 BuildRequires:	gcc >= 3.4
 %endif
-BuildRequires:	sharutils
-BuildRequires:	libtool-devel
+BuildRequires:	bison
+BuildRequires:	flex
 BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
 
 %description
@@ -114,6 +114,8 @@ ELF, and machine-specific ELF handling.
 
 %prep
 %setup -q
+ln -f %{SOURCE1} %{SOURCE2} tests || cp -f %{SOURCE1} %{SOURCE2} tests
+
 %if %{build_compat}
 %patch0 -p1 -b .portability
 sleep 1
@@ -129,7 +131,9 @@ find . \( -name configure -o -name config.h.in \) -print | xargs touch
 %patch5 -p1 -b .sparc_elf32_plt
 %patch6 -p1 -b .inline
 %patch7 -p1 -b .erllint
-%patch8 -p1 -b .libdwfl_indef
+%patch9 -p1 -b .leak
+%patch10 -p1 -b .null
+%patch11 -p1 -b .unaligned
 
 # Don't use -Werror with -Wformat=2 -std=gnu99 as %a[ won't be caught
 # as the GNU %a extension.
@@ -190,6 +194,7 @@ rm -rf %{buildroot}
 %{_bindir}/eu-size
 %{_bindir}/eu-strip
 %{_bindir}/eu-strings
+%{_bindir}/eu-make-debug-archive
 %{_libdir}/libdw-%{version}.so
 %{_libdir}/libdw*.so.*
 %dir %{_libdir}/elfutils
