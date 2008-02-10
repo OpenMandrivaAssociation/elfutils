@@ -23,7 +23,7 @@
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
 Version:	0.131
-Release:	%mkrel 1
+Release:	%mkrel 2
 License:	GPLv2+
 Group:		Development/Other
 Source0:	ftp://sources.redhat.com/pub/systemtap/elfutils/%{name}-%{version}.tar.bz2
