@@ -22,26 +22,17 @@
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
-Version:	0.131
-Release:	%mkrel 2
+Version:	0.135
+Release:	%mkrel 1
 License:	GPLv2+
 Group:		Development/Other
-Source0:	ftp://sources.redhat.com/pub/systemtap/elfutils/%{name}-%{version}.tar.bz2
+Url:		http://fedorahosted.org/elfutils/
+Source0:	http://fedorahosted.org/releases/e/l/elfutils/%{name}-%{version}.tar.gz
 Source1:	testfile16.symtab.bz2
 Source2:	testfile16.symtab.debug.bz2
-# these 3 patches are from ftp://sources.redhat.com/pub/systemtap/elfutils/ 
+# these 2 patches are from ftp://sources.redhat.com/pub/systemtap/elfutils/ 
 Patch0:		elfutils-portability.patch
 Patch1:		elfutils-robustify.patch
-Patch2:		elfutils-strip-copy-symtab.patch
-# mdv patches
-Patch3:		elfutils-0.120-fix-sparc-build.patch
-Patch4:		elfutils-0.108-align.patch
-Patch5:		elfutils-0.123-fix-special-sparc-elf32-plt-entries.patch
-Patch6:		gnu_inline.diff
-Patch7:		%{name}-0.128-elflint.patch
-Patch9:		pointer_cast.diff
-Patch10:	readelf_subelf.diff
-Patch11:	unaligned.diff
 Requires:	%{libname} = %{version}-%{release}
 %if %{build_compat}
 BuildRequires:	gcc >= 3.2
@@ -50,6 +41,7 @@ BuildRequires:	gcc >= 3.4
 %endif
 BuildRequires:	bison
 BuildRequires:	flex
+BuildRequires:	glibc-devel
 BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
 
 %description
@@ -61,10 +53,9 @@ Elfutils is a collection of utilities, including:
    * %{_program_prefix}readelf: the see the raw ELF file structures
    * %{_program_prefix}elflint: to check for well-formed ELF files
 
-%package -n	%{libnamedevel}
+%package -n %{libnamedevel}
 Summary:	Development libraries to handle compiled objects
 Group:		Development/Other
-License:	GPL
 Requires:	%{libname} = %{version}-%{release}
 Provides:	%{name}-devel lib%{name}-devel
 Obsoletes:	libelf-devel
@@ -81,10 +72,9 @@ applications for handling compiled objects.
    * libebl provides some higher-level ELF access functionality.
    * libasm provides a programmable assembler interface.
 
-%package -n	%{libnamestaticdevel}
+%package -n %{libnamestaticdevel}
 Summary:	Static libraries for development with libelfutils
 Group:		Development/Other
-License:	GPL
 Requires:	%{libnamedevel} = %{version}-%{release}
 Provides:	%{name}-static-devel 
 Obsoletes:	libelf-static-devel libelf0-static-devel
@@ -95,10 +85,9 @@ Obsoletes:	%{_lib}%{name}1-static-devel
 This package contains the static libraries to create applications for
 handling compiled objects.
 
-%package -n	%{libname}
+%package -n %{libname}
 Summary:	Libraries to read and write ELF files
 Group:		System/Libraries
-License:	OSL
 Provides:	lib%{name}
 Obsoletes:	libelf libelf0
 Provides:	libelf libelf0
@@ -125,15 +114,6 @@ find . \( -name configure -o -name config.h.in \) -print | xargs touch
 %endif
 
 %patch1 -p1 -b .robustify
-%patch2 -p1 -b .strip_copy_symtab
-%patch3 -p1 -b .sparc
-%patch4 -p1 -b .align
-%patch5 -p1 -b .sparc_elf32_plt
-%patch6 -p1 -b .inline
-%patch7 -p1 -b .erllint
-%patch9 -p1 -b .leak
-%patch10 -p1 -b .null
-%patch11 -p1 -b .unaligned
 
 # Don't use -Werror with -Wformat=2 -std=gnu99 as %a[ won't be caught
 # as the GNU %a extension.
@@ -144,8 +124,9 @@ mkdir build-%{_target_platform}
 pushd build-%{_target_platform}
 CONFIGURE_TOP=.. \
 %configure2_5x \
-%{?_program_prefix: --program-prefix=%{_program_prefix}} --enable-shared
-%make
+%{?_program_prefix: --program-prefix=%{_program_prefix}}
+# (tpg) re-define LDFLAGS
+%make LDFLAGS="-Wl,--as-needed"
 popd
 
 %check
@@ -159,7 +140,8 @@ popd
 rm -rf %{buildroot}
 mkdir -p %{buildroot}%{_prefix}
 
-%makeinstall_std -C build-%{_target_platform}
+# (tpg) re-define LDFLAGS
+%makeinstall_std -C build-%{_target_platform} LDFLAGS="-Wl,--as-needed"
 
 chmod +x %{buildroot}%{_libdir}/lib*.so*
 chmod +x %{buildroot}%{_libdir}/elfutils/lib*.so*
@@ -167,10 +149,6 @@ chmod +x %{buildroot}%{_libdir}/elfutils/lib*.so*
 # XXX Nuke unpackaged files
 { cd %{buildroot}
   rm -f .%{_bindir}/eu-ld
-  rm -f .%{_bindir}/eu-objdump
-  rm -f .%{_includedir}/elfutils/libasm.h
-  rm -f .%{_libdir}/libasm-%{version}.so
-  rm -f .%{_libdir}/libasm.{a,so}
 }
 
 %clean
@@ -182,21 +160,11 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root)
 %doc NOTES README NEWS TODO
-%{_bindir}/eu-addr2line
-%{_bindir}/eu-ar
-%{_bindir}/eu-elfcmp
-%{_bindir}/eu-findtextrel
-%{_bindir}/eu-elflint
-%{_bindir}/eu-unstrip
-%{_bindir}/eu-nm
-%{_bindir}/eu-ranlib
-%{_bindir}/eu-readelf
-%{_bindir}/eu-size
-%{_bindir}/eu-strip
-%{_bindir}/eu-strings
-%{_bindir}/eu-make-debug-archive
+%{_bindir}/eu-*
 %{_libdir}/libdw-%{version}.so
 %{_libdir}/libdw*.so.*
+%{_libdir}/libasm-%{version}.so
+%{_libdir}/libasm*.so.*
 %dir %{_libdir}/elfutils
 %{_libdir}/elfutils/lib*.so
 
@@ -207,18 +175,14 @@ rm -rf %{buildroot}
 %{_includedir}/gelf.h
 %{_includedir}/nlist.h
 %dir %{_includedir}/elfutils
-%{_includedir}/elfutils/elf-knowledge.h
-%{_includedir}/elfutils/libebl.h
-%{_includedir}/elfutils/libdw.h
-%{_includedir}/elfutils/libdwfl.h
+%{_includedir}/elfutils/*.h
 %{_libdir}/libelf.so
 %{_libdir}/libdw.so
+%{_libdir}/libasm.so
 
 %files -n %{libnamestaticdevel}
 %defattr(-,root,root)
-%{_libdir}/libebl.a
-%{_libdir}/libelf.a
-%{_libdir}/libdw.a
+%{_libdir}/*.a
 
 %files -n %{libname}
 %defattr(-,root,root)
