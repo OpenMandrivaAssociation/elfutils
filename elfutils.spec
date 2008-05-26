@@ -122,11 +122,14 @@ perl -pi -e '/AM_CFLAGS =/ and s/-Werror//g' ./tests/Makefile.{in,am}
 %build
 mkdir build-%{_target_platform}
 pushd build-%{_target_platform}
+
+# [pixel] libld_elf_i386.so is quite weird, could be dropped? workarounding for now...
+%define _disable_ld_no_undefined 1
+
 CONFIGURE_TOP=.. \
 %configure2_5x \
 %{?_program_prefix: --program-prefix=%{_program_prefix}}
-# (tpg) re-define LDFLAGS
-%make LDFLAGS="-Wl,--as-needed"
+%make
 popd
 
 %check
@@ -140,8 +143,7 @@ popd
 rm -rf %{buildroot}
 mkdir -p %{buildroot}%{_prefix}
 
-# (tpg) re-define LDFLAGS
-%makeinstall_std -C build-%{_target_platform} LDFLAGS="-Wl,--as-needed"
+%makeinstall_std -C build-%{_target_platform}
 
 chmod +x %{buildroot}%{_libdir}/lib*.so*
 chmod +x %{buildroot}%{_libdir}/elfutils/lib*.so*
