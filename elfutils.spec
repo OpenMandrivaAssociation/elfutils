@@ -29,8 +29,6 @@ Group:		Development/Other
 Url:		http://fedorahosted.org/elfutils/
 Source0:	http://fedorahosted.org/releases/e/l/elfutils/%{name}-%{version}.tar.gz
 Source1:	%{SOURCE0}.sig
-Source2:	testfile16.symtab.bz2
-Source3:	testfile16.symtab.debug.bz2
 # these 2 patches are from ftp://sources.redhat.com/pub/systemtap/elfutils/ 
 Patch0:		elfutils-portability.patch
 Patch1:		elfutils-robustify.patch
@@ -58,10 +56,11 @@ Elfutils is a collection of utilities, including:
 Summary:	Development libraries to handle compiled objects
 Group:		Development/Other
 Requires:	%{libname} = %{version}-%{release}
-Provides:	%{name}-devel lib%{name}-devel
-Obsoletes:	libelf-devel
-Obsoletes:	libelf0-devel
-Obsoletes:	%{_lib}%{name}1-devel
+Provides:	%{name}-devel 
+Provides:	lib%{name}-devel
+Obsoletes:	libelf-devel < 0.137
+Obsoletes:	libelf0-devel < 0.137
+Obsoletes:	%{_lib}%{name}1-devel < 0.137
 Provides:	libelf-devel libelf0-devel
 
 %description -n	%{libnamedevel}
@@ -78,9 +77,11 @@ Summary:	Static libraries for development with libelfutils
 Group:		Development/Other
 Requires:	%{libnamedevel} = %{version}-%{release}
 Provides:	%{name}-static-devel 
-Obsoletes:	libelf-static-devel libelf0-static-devel
-Provides:	libelf-static-devel libelf0-static-devel
-Obsoletes:	%{_lib}%{name}1-static-devel
+Obsoletes:	libelf-static-devel < 0.137
+Obsoletes:	libelf0-static-devel < 0.137
+Provides:	libelf-static-devel
+Provides:	libelf0-static-devel
+Obsoletes:	%{_lib}%{name}1-static-devel < 0.137
 
 %description -n	%{libnamestaticdevel}
 This package contains the static libraries to create applications for
@@ -90,8 +91,10 @@ handling compiled objects.
 Summary:	Libraries to read and write ELF files
 Group:		System/Libraries
 Provides:	lib%{name}
-Obsoletes:	libelf libelf0
-Provides:	libelf libelf0
+Obsoletes:	libelf < 0.137
+Obsoletes:	libelf0 < 0.137
+Provides:	libelf
+Provides:	libelf0
 
 %description -n	%{libname}
 This package provides DSOs which allow reading and writing ELF files
@@ -104,8 +107,6 @@ ELF, and machine-specific ELF handling.
 
 %prep
 %setup -q
-ln -f %{SOURCE2} %{SOURCE3} tests || cp -f %{SOURCE2} %{SOURCE3} tests
-
 %if %{build_compat}
 %patch0 -p1 -b .portability
 sleep 1
@@ -121,6 +122,8 @@ find . \( -name configure -o -name config.h.in \) -print | xargs touch
 perl -pi -e '/AM_CFLAGS =/ and s/-Werror//g' ./tests/Makefile.{in,am}
 
 %build
+autoreconf -fiv
+
 mkdir build-%{_target_platform}
 pushd build-%{_target_platform}
 
@@ -129,7 +132,10 @@ pushd build-%{_target_platform}
 
 CONFIGURE_TOP=.. \
 %configure2_5x \
-%{?_program_prefix: --program-prefix=%{_program_prefix}}
+	%{?_program_prefix: --program-prefix=%{_program_prefix}}
+# (tpg) will try to enable this
+#	--enable-tls
+
 %make
 popd
 
