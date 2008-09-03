@@ -22,14 +22,15 @@
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
-Version:	0.135
-Release:	%mkrel 2
+Version:	0.137
+Release:	%mkrel 1
 License:	GPLv2+
 Group:		Development/Other
 Url:		http://fedorahosted.org/elfutils/
 Source0:	http://fedorahosted.org/releases/e/l/elfutils/%{name}-%{version}.tar.gz
-Source1:	testfile16.symtab.bz2
-Source2:	testfile16.symtab.debug.bz2
+Source1:	%{SOURCE0}.sig
+Source2:	testfile16.symtab.bz2
+Source3:	testfile16.symtab.debug.bz2
 # these 2 patches are from ftp://sources.redhat.com/pub/systemtap/elfutils/ 
 Patch0:		elfutils-portability.patch
 Patch1:		elfutils-robustify.patch
@@ -103,7 +104,7 @@ ELF, and machine-specific ELF handling.
 
 %prep
 %setup -q
-ln -f %{SOURCE1} %{SOURCE2} tests || cp -f %{SOURCE1} %{SOURCE2} tests
+ln -f %{SOURCE2} %{SOURCE3} tests || cp -f %{SOURCE2} %{SOURCE3} tests
 
 %if %{build_compat}
 %patch0 -p1 -b .portability
