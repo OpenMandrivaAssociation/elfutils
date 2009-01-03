@@ -32,6 +32,7 @@ Source1:	%{SOURCE0}.sig
 # these 2 patches are from ftp://sources.redhat.com/pub/systemtap/elfutils/ 
 Patch0:		elfutils-portability.patch
 Patch1:		elfutils-robustify.patch
+Patch2:		elfutils-0.138-libelf-padding-fix.patch
 Requires:	%{libname} = %{version}-%{release}
 %if %{build_compat}
 BuildRequires:	gcc >= 3.2
@@ -44,13 +45,11 @@ BuildRequires:	glibc-devel
 BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
 
 %description
-Elfutils is a collection of utilities, including:
-
-   * %{_program_prefix}nm: for listing symbols from object files
-   * %{_program_prefix}size: for listing the section sizes of an object or archive file
-   * %{_program_prefix}strip: for discarding symbols
-   * %{_program_prefix}readelf: the see the raw ELF file structures
-   * %{_program_prefix}elflint: to check for well-formed ELF files
+Elfutils is a collection of utilities, including ld (a linker),
+nm (for listing symbols from object files), size (for listing the
+section sizes of an object or archive file), strip (for discarding
+symbols), readelf (to see the raw ELF file structures), and elflint
+(to check for well-formed ELF files).
 
 %package -n %{libnamedevel}
 Summary:	Development libraries to handle compiled objects
@@ -116,6 +115,8 @@ find . \( -name configure -o -name config.h.in \) -print | xargs touch
 %endif
 
 %patch1 -p1 -b .robustify
+
+%patch2 -p1
 
 # Don't use -Werror with -Wformat=2 -std=gnu99 as %a[ won't be caught
 # as the GNU %a extension.
