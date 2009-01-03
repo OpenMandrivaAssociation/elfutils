@@ -22,12 +22,12 @@
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
-Version:	0.137
-Release:	%mkrel 2
+Version:	0.138
+Release:	%mkrel 1
 License:	GPLv2+
 Group:		Development/Other
 Url:		http://fedorahosted.org/elfutils/
-Source0:	http://fedorahosted.org/releases/e/l/elfutils/%{name}-%{version}.tar.gz
+Source0:	http://fedorahosted.org/releases/e/l/elfutils/%{name}-%{version}.tar.bz2
 Source1:	%{SOURCE0}.sig
 # these 2 patches are from ftp://sources.redhat.com/pub/systemtap/elfutils/ 
 Patch0:		elfutils-portability.patch
