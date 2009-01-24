@@ -32,7 +32,6 @@ Source1:	%{SOURCE0}.sig
 # these 2 patches are from ftp://sources.redhat.com/pub/systemtap/elfutils/ 
 Patch0:		elfutils-portability.patch
 Patch1:		elfutils-robustify.patch
-Patch2:		elfutils-0.138-libelf-padding-fix.patch
 Requires:	%{libname} = %{version}-%{release}
 %if %{build_compat}
 BuildRequires:	gcc >= 3.2
@@ -115,8 +114,6 @@ find . \( -name configure -o -name config.h.in \) -print | xargs touch
 %endif
 
 %patch1 -p1 -b .robustify
-
-%patch2 -p1
 
 # Don't use -Werror with -Wformat=2 -std=gnu99 as %a[ won't be caught
 # as the GNU %a extension.
