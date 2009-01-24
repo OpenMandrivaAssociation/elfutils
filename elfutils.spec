@@ -41,6 +41,8 @@ BuildRequires:	gcc >= 3.4
 BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	glibc-devel
+BuildRequires:	zlib-devel
+BuildRequires:	bzip2-devel
 BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
 
 %description
@@ -130,9 +132,10 @@ pushd build-%{_target_platform}
 
 CONFIGURE_TOP=.. \
 %configure2_5x \
-	%{?_program_prefix: --program-prefix=%{_program_prefix}}
-# (tpg) will try to enable this
-#	--enable-tls
+	%{?_program_prefix: --program-prefix=%{_program_prefix}} \
+	--enable-thread-safety \
+	--with-zlib \
+	--with-bzlib
 
 %make
 popd
