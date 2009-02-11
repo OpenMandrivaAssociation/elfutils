@@ -35,6 +35,8 @@ Patch1:		elfutils-robustify.patch
 
 # mdv patches
 Patch10:	elfutils-0.139-mips_backend.patch
+Patch11:	elfutils-0.139-sparc-align.patch
+Patch12:	elfutils-0.139-fix-special-sparc-elf32-plt-entries.patch
 Requires:	%{libname} = %{version}-%{release}
 %if %{build_compat}
 BuildRequires:	gcc >= 3.2
@@ -120,6 +122,8 @@ find . \( -name configure -o -name config.h.in \) -print | xargs touch
 
 %patch1 -p1 -b .robustify~
 %patch10 -p1 -b .mips~
+%patch11 -p1 -b .sparc_align~
+%patch12 -p1 -b .sparc_elf32_plt~
 
 # Don't use -Werror with -Wformat=2 -std=gnu99 as %a[ won't be caught
 # as the GNU %a extension.
