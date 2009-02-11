@@ -32,6 +32,9 @@ Source1:	%{SOURCE0}.sig
 # these 2 patches are from ftp://sources.redhat.com/pub/systemtap/elfutils/ 
 Patch0:		elfutils-portability.patch
 Patch1:		elfutils-robustify.patch
+
+# mdv patches
+Patch10:	elfutils-0.139-mips_backend.patch
 Requires:	%{libname} = %{version}-%{release}
 %if %{build_compat}
 BuildRequires:	gcc >= 3.2
@@ -108,14 +111,15 @@ ELF, and machine-specific ELF handling.
 %prep
 %setup -q
 %if %{build_compat}
-%patch0 -p1 -b .portability
+%patch0 -p1 -b .portability~
 sleep 1
 find . \( -name Makefile.in -o -name aclocal.m4 \) -print | xargs touch
 sleep 1
 find . \( -name configure -o -name config.h.in \) -print | xargs touch
 %endif
 
-%patch1 -p1 -b .robustify
+%patch1 -p1 -b .robustify~
+%patch10 -p1 -b .mips~
 
 # Don't use -Werror with -Wformat=2 -std=gnu99 as %a[ won't be caught
 # as the GNU %a extension.
