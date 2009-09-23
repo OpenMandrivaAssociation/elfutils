@@ -22,7 +22,7 @@
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
-Version:	0.142
+Version:	0.143
 Release:	%mkrel 1
 License:	GPLv2+
 Group:		Development/Other
