@@ -48,6 +48,7 @@ BuildRequires:	flex
 BuildRequires:	glibc-devel
 BuildRequires:	zlib-devel
 BuildRequires:	bzip2-devel
+BuildRequires:	lzma-devel
 BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
 
 %description
@@ -143,7 +144,8 @@ CONFIGURE_TOP=.. \
 	%{?_program_prefix: --program-prefix=%{_program_prefix}} \
 	--enable-thread-safety \
 	--with-zlib \
-	--with-bzlib
+	--with-bzlib \
+	--with-lzma
 
 %make
 popd
