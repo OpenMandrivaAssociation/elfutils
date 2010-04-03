@@ -22,7 +22,7 @@
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
-Version:	0.144
+Version:	0.145
 Release:	%mkrel 1
 License:	GPLv2+
 Group:		Development/Other
@@ -34,7 +34,7 @@ Patch0:		elfutils-portability.patch
 Patch1:		elfutils-robustify.patch
 
 # mdv patches
-Patch10:	elfutils-0.139-mips_backend.patch
+Patch10:	elfutils-0.145-mips_backend.patch
 Patch11:	elfutils-0.139-sparc-align.patch
 Patch12:	elfutils-0.139-fix-special-sparc-elf32-plt-entries.patch
 Requires:	%{libname} = %{version}-%{release}
