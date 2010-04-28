@@ -22,7 +22,7 @@
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
-Version:	0.145
+Version:	0.146
 Release:	%mkrel 1
 License:	GPLv2+
 Group:		Development/Other
@@ -49,6 +49,7 @@ BuildRequires:	glibc-devel
 BuildRequires:	zlib-devel
 BuildRequires:	bzip2-devel
 BuildRequires:	lzma-devel
+BuildRequires:	gettext-devel
 BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
 
 %description
@@ -166,6 +167,8 @@ mkdir -p %{buildroot}%{_prefix}
 chmod +x %{buildroot}%{_libdir}/lib*.so*
 chmod +x %{buildroot}%{_libdir}/elfutils/lib*.so*
 
+%find_lang %{name}
+
 # XXX Nuke unpackaged files
 { cd %{buildroot}
   rm -f .%{_bindir}/eu-ld
@@ -181,7 +184,7 @@ rm -rf %{buildroot}
 %postun -n %{libname} -p /sbin/ldconfig
 %endif
 
-%files
+%files -f %{name}.lang
 %defattr(-,root,root)
 %doc NOTES README NEWS TODO
 %{_bindir}/eu-*
