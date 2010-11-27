@@ -22,8 +22,8 @@
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
-Version:	0.149
-Release:	%mkrel 2
+Version:	0.150
+Release:	%mkrel 1
 License:	GPLv2+
 Group:		Development/Other
 Url:		http://fedorahosted.org/elfutils/
