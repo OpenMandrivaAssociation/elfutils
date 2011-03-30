@@ -5,20 +5,8 @@
 
 %define _program_prefix eu-
 
-%ifarch %{sunsparc}
-%define	build_check		1
-%else
-%define build_check		1
-%endif
-%{expand: %{?_without_CHECK:	%%global build_check 0}}
-%{expand: %{?_with_CHECK:	%%global build_check 1}}
-
-%define build_compat		0
-%if %{mdkversion} < 1010
-%define build_compat		1
-%endif
-%{expand: %{?_without_COMPAT:	%%global build_compat 0}}
-%{expand: %{?_with_COMPAT:	%%global build_compat 1}}
+%bcond_without	check
+%bcond_with	compat
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
@@ -39,7 +27,7 @@ Patch11:	elfutils-0.139-sparc-align.patch
 Patch12:	elfutils-0.139-fix-special-sparc-elf32-plt-entries.patch
 Patch13:	elfutils-0.152-strip-.GCC.command.line-section.patch
 Requires:	%{libname} = %{version}-%{release}
-%if %{build_compat}
+%if %{with compat}
 BuildRequires:	gcc >= 3.2
 %else
 BuildRequires:	gcc >= 3.4
@@ -59,7 +47,7 @@ section sizes of an object or archive file), strip (for discarding
 symbols), readelf (to see the raw ELF file structures), and elflint
 (to check for well-formed ELF files).
 
-%package -n %{libnamedevel}
+%package -n	%{libnamedevel}
 Summary:	Development libraries to handle compiled objects
 Group:		Development/Other
 Requires:	%{libname} = %{version}-%{release}
@@ -79,7 +67,7 @@ applications for handling compiled objects.
    * libebl provides some higher-level ELF access functionality.
    * libasm provides a programmable assembler interface.
 
-%package -n %{libnamestaticdevel}
+%package -n	%{libnamestaticdevel}
 Summary:	Static libraries for development with libelfutils
 Group:		Development/Other
 Requires:	%{libnamedevel} = %{version}-%{release}
@@ -94,7 +82,7 @@ Obsoletes:	%{_lib}%{name}1-static-devel < 0.137
 This package contains the static libraries to create applications for
 handling compiled objects.
 
-%package -n %{libname}
+%package -n	%{libname}
 Summary:	Libraries to read and write ELF files
 Group:		System/Libraries
 Provides:	lib%{name}
@@ -114,7 +102,7 @@ ELF, and machine-specific ELF handling.
 
 %prep
 %setup -q
-%if %{build_compat}
+%if %{with compat}
 %patch0 -p1 -b .portability~
 sleep 1
 find . \( -name Makefile.in -o -name aclocal.m4 \) -print | xargs touch
@@ -153,15 +141,13 @@ CONFIGURE_TOP=.. \
 popd
 
 %check
-%if %{build_check}
+%if %{with check}
 pushd build-%{_target_platform}
 %make check || :
 popd
 %endif
 
 %install
-mkdir -p %{buildroot}%{_prefix}
-
 %makeinstall_std -C build-%{_target_platform}
 
 chmod +x %{buildroot}%{_libdir}/lib*.so*
