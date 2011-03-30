@@ -23,7 +23,7 @@
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
 Version:	0.152
-Release:	%mkrel 1
+Release:	2
 License:	GPLv2+
 Group:		Development/Other
 Url:		http://fedorahosted.org/elfutils/
@@ -51,7 +51,6 @@ BuildRequires:	zlib-devel
 BuildRequires:	bzip2-devel
 BuildRequires:	lzma-devel
 BuildRequires:	gettext-devel
-BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
 
 %description
 Elfutils is a collection of utilities, including ld (a linker),
@@ -161,7 +160,6 @@ popd
 %endif
 
 %install
-rm -rf %{buildroot}
 mkdir -p %{buildroot}%{_prefix}
 
 %makeinstall_std -C build-%{_target_platform}
@@ -176,18 +174,7 @@ chmod +x %{buildroot}%{_libdir}/elfutils/lib*.so*
   rm -f .%{_bindir}/eu-ld
 }
 
-%clean
-rm -rf %{buildroot}
-
-%if %mdkversion < 200900
-%post -n %{libname} -p /sbin/ldconfig
-%endif
-%if %mdkversion < 200900
-%postun -n %{libname} -p /sbin/ldconfig
-%endif
-
 %files -f %{name}.lang
-%defattr(-,root,root)
 %doc NOTES README NEWS TODO
 %{_bindir}/eu-*
 %{_libdir}/libdw-%{version}.so
@@ -198,7 +185,6 @@ rm -rf %{buildroot}
 %{_libdir}/elfutils/lib*.so
 
 %files -n %{libnamedevel}
-%defattr(-,root,root)
 %{_includedir}/dwarf.h
 %{_includedir}/libelf.h
 %{_includedir}/gelf.h
@@ -210,10 +196,8 @@ rm -rf %{buildroot}
 %{_libdir}/libasm.so
 
 %files -n %{libnamestaticdevel}
-%defattr(-,root,root)
 %{_libdir}/*.a
 
 %files -n %{libname}
-%defattr(-,root,root)
 %{_libdir}/libelf-%{version}.so
 %{_libdir}/libelf*.so.%{major}*
