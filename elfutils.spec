@@ -166,8 +166,6 @@ chmod +x %{buildroot}%{_libdir}/elfutils/lib*.so*
 %{_libdir}/libelf.so
 %{_libdir}/libdw.so
 %{_libdir}/libasm.so
-%{_libdir}/elfutils/lib*.so
-%exclude %{_libdir}/elfutils/lib*-%{version}.so
 
 %files -n %{libnamestaticdevel}
 %{_libdir}/*.a
@@ -180,4 +178,4 @@ chmod +x %{buildroot}%{_libdir}/elfutils/lib*.so*
 %{_libdir}/libasm-%{version}.so
 %{_libdir}/libasm*.so.*
 %dir %{_libdir}/elfutils
-%{_libdir}/elfutils/lib*-%{version}.so
+%{_libdir}/elfutils/lib*.so
