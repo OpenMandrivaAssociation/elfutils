@@ -11,7 +11,7 @@
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
 Version:	0.152
-Release:	2
+Release:	3
 License:	GPLv2+
 Group:		Development/Other
 Url:		http://fedorahosted.org/elfutils/
@@ -154,11 +154,6 @@ chmod +x %{buildroot}%{_libdir}/lib*.so*
 chmod +x %{buildroot}%{_libdir}/elfutils/lib*.so*
 
 %find_lang %{name}
-
-# XXX Nuke unpackaged files
-{ cd %{buildroot}
-  rm -f .%{_bindir}/eu-ld
-}
 
 %files -f %{name}.lang
 %doc NOTES README NEWS TODO
