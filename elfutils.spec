@@ -5,7 +5,6 @@
 
 %define _program_prefix eu-
 
-%bcond_without	check
 %bcond_with	compat
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
@@ -138,11 +137,9 @@ CONFIGURE_TOP=.. \
 popd
 
 %check
-%if %{with check}
 pushd build-%{_target_platform}
 %make check
 popd
-%endif
 
 %install
 %makeinstall_std -C build-%{_target_platform}
