@@ -140,7 +140,7 @@ popd
 %check
 %if %{with check}
 pushd build-%{_target_platform}
-%make check || :
+%make check
 popd
 %endif
 
