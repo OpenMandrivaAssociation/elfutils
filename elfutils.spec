@@ -158,12 +158,6 @@ chmod +x %{buildroot}%{_libdir}/elfutils/lib*.so*
 %files -f %{name}.lang
 %doc NOTES README NEWS TODO
 %{_bindir}/eu-*
-%{_libdir}/libdw-%{version}.so
-%{_libdir}/libdw*.so.*
-%{_libdir}/libasm-%{version}.so
-%{_libdir}/libasm*.so.*
-%dir %{_libdir}/elfutils
-%{_libdir}/elfutils/lib*.so
 
 %files -n %{libnamedevel}
 %{_includedir}/dwarf.h
@@ -175,6 +169,8 @@ chmod +x %{buildroot}%{_libdir}/elfutils/lib*.so*
 %{_libdir}/libelf.so
 %{_libdir}/libdw.so
 %{_libdir}/libasm.so
+%{_libdir}/elfutils/lib*.so
+%exclude %{_libdir}/elfutils/lib*-%{version}.so
 
 %files -n %{libnamestaticdevel}
 %{_libdir}/*.a
@@ -182,3 +178,9 @@ chmod +x %{buildroot}%{_libdir}/elfutils/lib*.so*
 %files -n %{libname}
 %{_libdir}/libelf-%{version}.so
 %{_libdir}/libelf*.so.%{major}*
+%{_libdir}/libdw-%{version}.so
+%{_libdir}/libdw*.so.*
+%{_libdir}/libasm-%{version}.so
+%{_libdir}/libasm*.so.*
+%dir %{_libdir}/elfutils
+%{_libdir}/elfutils/lib*-%{version}.so
