@@ -49,7 +49,7 @@ symbols), readelf (to see the raw ELF file structures), and elflint
 %package -n	%{libnamedevel}
 Summary:	Development libraries to handle compiled objects
 Group:		Development/Other
-Requires:	%{libname} = %{version}-%{release}
+Requires:	%{libname} = %{EVRD}
 Provides:	%{name}-devel 
 Obsoletes:	libelf-devel < 0.137
 Obsoletes:	libelf0-devel < 0.137
@@ -68,7 +68,7 @@ applications for handling compiled objects.
 %package -n	%{libnamestaticdevel}
 Summary:	Static libraries for development with libelfutils
 Group:		Development/Other
-Requires:	%{libnamedevel} = %{version}-%{release}
+Requires:	%{libnamedevel} = %{EVRD}
 Provides:	%{name}-static-devel 
 Obsoletes:	libelf-static-devel < 0.137
 Obsoletes:	libelf0-static-devel < 0.137
