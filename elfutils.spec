@@ -26,7 +26,6 @@ Patch11:	elfutils-0.139-sparc-align.patch
 Patch12:	elfutils-0.139-fix-special-sparc-elf32-plt-entries.patch
 Patch13:	elfutils-0.152-strip-.GCC.command.line-section.patch
 Patch14:	elfutils-0.152-reloc-debug-sections.patch
-Requires:	%{libname} = %{version}-%{release}
 %if %{with compat}
 BuildRequires:	gcc >= 3.2
 %else
@@ -52,7 +51,6 @@ Summary:	Development libraries to handle compiled objects
 Group:		Development/Other
 Requires:	%{libname} = %{version}-%{release}
 Provides:	%{name}-devel 
-Provides:	lib%{name}-devel
 Obsoletes:	libelf-devel < 0.137
 Obsoletes:	libelf0-devel < 0.137
 Obsoletes:	%{_lib}%{name}1-devel < 0.137
