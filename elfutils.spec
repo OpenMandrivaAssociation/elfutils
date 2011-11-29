@@ -10,7 +10,7 @@
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
 Version:	0.152
-Release:	3
+Release:	4
 License:	GPLv2+
 Group:		Development/Other
 Url:		http://fedorahosted.org/elfutils/
@@ -25,6 +25,7 @@ Patch10:	elfutils-0.145-mips_backend.patch
 Patch11:	elfutils-0.139-sparc-align.patch
 Patch12:	elfutils-0.139-fix-special-sparc-elf32-plt-entries.patch
 Patch13:	elfutils-0.152-strip-.GCC.command.line-section.patch
+Patch14:	elfutils-0.152-reloc-debug-sections.patch
 Requires:	%{libname} = %{version}-%{release}
 %if %{with compat}
 BuildRequires:	gcc >= 3.2
@@ -114,10 +115,11 @@ find . \( -name configure -o -name config.h.in \) -print | xargs touch
 %patch11 -p1 -b .sparc_align~
 %patch12 -p1 -b .sparc_elf32_plt~
 %patch13 -p1 -b .gcc_switches~
-
-%build
+%patch14 -p1 -b .reloc_debug~
+chmod +x tests/run-strip-reloc.sh
 autoreconf -fiv
 
+%build
 mkdir build-%{_target_platform}
 pushd build-%{_target_platform}
 
