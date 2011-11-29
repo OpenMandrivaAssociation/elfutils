@@ -83,7 +83,6 @@ handling compiled objects.
 %package -n	%{libname}
 Summary:	Libraries to read and write ELF files
 Group:		System/Libraries
-Provides:	lib%{name}
 Obsoletes:	libelf < 0.137
 Obsoletes:	libelf0 < 0.137
 Provides:	libelf
