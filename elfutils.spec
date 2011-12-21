@@ -145,7 +145,7 @@ chmod +x %{buildroot}%{_libdir}/elfutils/lib*.so*
 %dir %{_libdir}/elfutils
 %{_libdir}/elfutils/lib*.so
 
-%files -n %{libname}
+%files -n %{libelf}
 %{_libdir}/libelf-%{version}.so
 %{_libdir}/libelf*.so.%{major}*
 
