@@ -1,23 +1,28 @@
 %define major 1
+
+#the old name was _libelfutils1
 %define libname	%mklibname %{name} %{major}
-%define libnamedevel %mklibname %{name} -d
-%define libnamestaticdevel %mklibname %{name} -d -s
+
+%define libasm	%mklibname asm %{major}
+%define libdw	%mklibname dw %{major}
+%define libelf	%mklibname elf %{major}
+%define develname %mklibname %{name} -d
+%define staticname %mklibname %{name} -d -s
 
 %define _program_prefix eu-
-
-%bcond_with	compat
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
 Version:	0.152
-Release:	4
+Release:	5
 License:	GPLv2+
 Group:		Development/Other
 Url:		http://fedorahosted.org/elfutils/
 Source0:	http://fedorahosted.org/releases/e/l/elfutils/%{name}-%{version}.tar.bz2
 Source1:	%{SOURCE0}.sig
 # these 2 patches are from ftp://sources.redhat.com/pub/systemtap/elfutils/ 
-Patch0:		elfutils-portability.patch
+# this hasn't been used since 200700 import why keep around
+#Patch0:		elfutils-portability.patch
 Patch1:		elfutils-robustify.patch
 
 # mdv patches
@@ -26,11 +31,6 @@ Patch11:	elfutils-0.139-sparc-align.patch
 Patch12:	elfutils-0.139-fix-special-sparc-elf32-plt-entries.patch
 Patch13:	elfutils-0.152-strip-.GCC.command.line-section.patch
 Patch14:	elfutils-0.152-reloc-debug-sections.patch
-%if %{with compat}
-BuildRequires:	gcc >= 3.2
-%else
-BuildRequires:	gcc >= 3.4
-%endif
 BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	glibc-devel
@@ -38,6 +38,7 @@ BuildRequires:	zlib-devel
 BuildRequires:	bzip2-devel
 BuildRequires:	lzma-devel
 BuildRequires:	gettext-devel
+Obsoletes:	%{libname}
 
 %description
 Elfutils is a collection of utilities, including ld (a linker),
@@ -46,17 +47,42 @@ section sizes of an object or archive file), strip (for discarding
 symbols), readelf (to see the raw ELF file structures), and elflint
 (to check for well-formed ELF files).
 
-%package -n	%{libnamedevel}
+%package -n	%{libasm}
+Summary:	Libraries to read and write ELF files
+Group:		System/Libraries
+Obsoletes:	%{libname}
+
+%description -n	%{libasm}
+Included are the helper library which implement machine-specific ELF handling.
+
+%package -n	%{libdw}
+Summary:	Libraries to read and write ELF files
+Group:		System/Libraries
+Obsoletes:	%{libname}
+
+%description -n	%{libdw}
+Included are the helper library which implement DWARF ELF handling.
+
+%package -n	%{libelf}
+Summary:	Libraries to read and write ELF files
+Group:		System/Libraries
+Obsoletes:	%{libname}
+
+%description -n	%{libelf}
+This package provides DSOs which allow reading and writing ELF files
+on a high level.  Third party programs depend on this package to read
+internals of ELF files.  The programs of the elfutils package use it
+also to generate new ELF files.
+
+%package -n	%{develname}
 Summary:	Development libraries to handle compiled objects
 Group:		Development/Other
-Requires:	%{libname} = %{EVRD}
+Requires:	%{libasm} = %{EVRD}
+Requires:	%{libdw} = %{EVRD}
+Requires:	%{libelf} = %{EVRD}
 Provides:	%{name}-devel 
-Obsoletes:	libelf-devel < 0.137
-Obsoletes:	libelf0-devel < 0.137
-Obsoletes:	%{_lib}%{name}1-devel < 0.137
-Provides:	libelf-devel libelf0-devel
 
-%description -n	%{libnamedevel}
+%description -n	%{develname}
 This package contains the headers and dynamic libraries to create
 applications for handling compiled objects.
 
@@ -65,54 +91,19 @@ applications for handling compiled objects.
    * libebl provides some higher-level ELF access functionality.
    * libasm provides a programmable assembler interface.
 
-%package -n	%{libnamestaticdevel}
+%package -n	%{staticname}
 Summary:	Static libraries for development with libelfutils
 Group:		Development/Other
-Requires:	%{libnamedevel} = %{EVRD}
+Requires:	%{develname} = %{EVRD}
 Provides:	%{name}-static-devel 
-Obsoletes:	libelf-static-devel < 0.137
-Obsoletes:	libelf0-static-devel < 0.137
-Provides:	libelf-static-devel
-Provides:	libelf0-static-devel
-Obsoletes:	%{_lib}%{name}1-static-devel < 0.137
 
-%description -n	%{libnamestaticdevel}
+%description -n	%{staticname}
 This package contains the static libraries to create applications for
 handling compiled objects.
 
-%package -n	%{libname}
-Summary:	Libraries to read and write ELF files
-Group:		System/Libraries
-Obsoletes:	libelf < 0.137
-Obsoletes:	libelf0 < 0.137
-Provides:	libelf
-Provides:	libelf0
-
-%description -n	%{libname}
-This package provides DSOs which allow reading and writing ELF files
-on a high level.  Third party programs depend on this package to read
-internals of ELF files.  The programs of the elfutils package use it
-also to generate new ELF files.
-
-Also included are numerous helper libraries which implement DWARF,
-ELF, and machine-specific ELF handling.
-
 %prep
 %setup -q
-%if %{with compat}
-%patch0 -p1 -b .portability~
-sleep 1
-find . \( -name Makefile.in -o -name aclocal.m4 \) -print | xargs touch
-sleep 1
-find . \( -name configure -o -name config.h.in \) -print | xargs touch
-%endif
-
-%patch1 -p1 -b .robustify~
-%patch10 -p1 -b .mips~
-%patch11 -p1 -b .sparc_align~
-%patch12 -p1 -b .sparc_elf32_plt~
-%patch13 -p1 -b .gcc_switches~
-%patch14 -p1 -b .reloc_debug~
+%apply_patches
 chmod +x tests/run-strip-reloc.sh
 autoreconf -fiv
 
@@ -151,8 +142,22 @@ chmod +x %{buildroot}%{_libdir}/elfutils/lib*.so*
 %files -f %{name}.lang
 %doc NOTES README NEWS TODO
 %{_bindir}/eu-*
+%dir %{_libdir}/elfutils
+%{_libdir}/elfutils/lib*.so
 
-%files -n %{libnamedevel}
+%files -n %{libname}
+%{_libdir}/libelf-%{version}.so
+%{_libdir}/libelf*.so.%{major}*
+
+%files -n %{libdw}
+%{_libdir}/libdw-%{version}.so
+%{_libdir}/libdw*.so.*
+
+%files -n %{libasm}
+%{_libdir}/libasm-%{version}.so
+%{_libdir}/libasm*.so.*
+
+%files -n %{develname}
 %{_includedir}/dwarf.h
 %{_includedir}/libelf.h
 %{_includedir}/gelf.h
@@ -163,15 +168,6 @@ chmod +x %{buildroot}%{_libdir}/elfutils/lib*.so*
 %{_libdir}/libdw.so
 %{_libdir}/libasm.so
 
-%files -n %{libnamestaticdevel}
+%files -n %{staticname}
 %{_libdir}/*.a
 
-%files -n %{libname}
-%{_libdir}/libelf-%{version}.so
-%{_libdir}/libelf*.so.%{major}*
-%{_libdir}/libdw-%{version}.so
-%{_libdir}/libdw*.so.*
-%{_libdir}/libasm-%{version}.so
-%{_libdir}/libasm*.so.*
-%dir %{_libdir}/elfutils
-%{_libdir}/elfutils/lib*.so
