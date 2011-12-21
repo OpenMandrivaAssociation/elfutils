@@ -151,11 +151,11 @@ chmod +x %{buildroot}%{_libdir}/elfutils/lib*.so*
 
 %files -n %{libdw}
 %{_libdir}/libdw-%{version}.so
-%{_libdir}/libdw*.so.*
+%{_libdir}/libdw*.so.%{major}*
 
 %files -n %{libasm}
 %{_libdir}/libasm-%{version}.so
-%{_libdir}/libasm*.so.*
+%{_libdir}/libasm*.so.%{major}*
 
 %files -n %{develname}
 %{_includedir}/dwarf.h
