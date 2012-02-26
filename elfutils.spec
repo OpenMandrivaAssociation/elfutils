@@ -127,7 +127,7 @@ popd
 
 %check
 pushd build-%{_target_platform}
-%make check
+make check
 popd
 
 %install
