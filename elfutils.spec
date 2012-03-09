@@ -32,6 +32,7 @@ Patch12:	elfutils-0.139-fix-special-sparc-elf32-plt-entries.patch
 Patch13:	elfutils-0.152-strip-.GCC.command.line-section.patch
 Patch14:	elfutils-0.153-add-missing-lpthread-linkage.patch
 Patch15:	elfutils_signed_comparison.patch
+Patch16:	elfutils-skip_elflint_self_test.patch
 BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	glibc-devel
