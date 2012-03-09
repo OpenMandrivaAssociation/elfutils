@@ -1,20 +1,20 @@
-%define major 1
+%define	major	1
 
 #the old name was _libelfutils1
-%define libname	%mklibname %{name} %{major}
+%define	libname	%mklibname %{name} %{major}
 
-%define libasm	%mklibname asm %{major}
+%define	libasm	%mklibname asm %{major}
 %define libdw	%mklibname dw %{major}
-%define libelf	%mklibname elf %{major}
-%define develname %mklibname %{name} -d
-%define staticname %mklibname %{name} -d -s
+%define	libelf	%mklibname elf %{major}
+%define	devname	%mklibname %{name} -d
+%define	static	%mklibname %{name} -d -s
 
 %define _program_prefix eu-
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
 Version:	0.153
-Release:	2
+Release:	1
 License:	GPLv2+
 Group:		Development/Other
 Url:		http://fedorahosted.org/elfutils/
@@ -76,7 +76,7 @@ on a high level.  Third party programs depend on this package to read
 internals of ELF files.  The programs of the elfutils package use it
 also to generate new ELF files.
 
-%package -n	%{develname}
+%package -n	%{devname}
 Summary:	Development libraries to handle compiled objects
 Group:		Development/Other
 Requires:	%{libasm} = %{EVRD}
@@ -84,7 +84,7 @@ Requires:	%{libdw} = %{EVRD}
 Requires:	%{libelf} = %{EVRD}
 Provides:	%{name}-devel 
 
-%description -n	%{develname}
+%description -n	%{devname}
 This package contains the headers and dynamic libraries to create
 applications for handling compiled objects.
 
@@ -93,13 +93,13 @@ applications for handling compiled objects.
    * libebl provides some higher-level ELF access functionality.
    * libasm provides a programmable assembler interface.
 
-%package -n	%{staticname}
+%package -n	%{static}
 Summary:	Static libraries for development with libelfutils
 Group:		Development/Other
-Requires:	%{develname} = %{EVRD}
+Requires:	%{devname} = %{EVRD}
 Provides:	%{name}-static-devel 
 
-%description -n	%{staticname}
+%description -n	%{static}
 This package contains the static libraries to create applications for
 handling compiled objects.
 
@@ -157,7 +157,7 @@ chmod +x %{buildroot}%{_libdir}/elfutils/lib*.so*
 %{_libdir}/libasm-%{version}.so
 %{_libdir}/libasm*.so.%{major}*
 
-%files -n %{develname}
+%files -n %{devname}
 %{_includedir}/dwarf.h
 %{_includedir}/libelf.h
 %{_includedir}/gelf.h
@@ -168,6 +168,6 @@ chmod +x %{buildroot}%{_libdir}/elfutils/lib*.so*
 %{_libdir}/libdw.so
 %{_libdir}/libasm.so
 
-%files -n %{staticname}
+%files -n %{static}
 %{_libdir}/*.a
 
