@@ -103,8 +103,6 @@ handling compiled objects.
 %prep
 %setup -q
 %apply_patches
-chmod +x tests/run-strip-reloc.sh
-autoreconf -fiv
 
 %build
 mkdir build-%{_target_platform}
