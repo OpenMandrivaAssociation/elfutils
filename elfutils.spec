@@ -26,9 +26,9 @@ Source1:	%{SOURCE0}.sig
 Patch1:		elfutils-robustify.patch
 
 # mdv patches
-Patch10:	elfutils-0.145-mips_backend.patch
-Patch11:	elfutils-0.139-sparc-align.patch
-Patch12:	elfutils-0.139-fix-special-sparc-elf32-plt-entries.patch
+#Patch10:	elfutils-0.145-mips_backend.patch
+#Patch11:	elfutils-0.139-sparc-align.patch
+#Patch12:	elfutils-0.139-fix-special-sparc-elf32-plt-entries.patch
 Patch13:	elfutils-0.152-strip-.GCC.command.line-section.patch
 Patch14:	elfutils-0.153-add-missing-lpthread-linkage.patch
 BuildRequires:	bison
