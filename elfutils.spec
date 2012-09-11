@@ -13,8 +13,8 @@
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
-Version:	0.154
-Release:	2
+Version:	0.155
+Release:	1
 License:	GPLv2+
 Group:		Development/Other
 Url:		http://fedorahosted.org/elfutils/
@@ -50,7 +50,7 @@ section sizes of an object or archive file), strip (for discarding
 symbols), readelf (to see the raw ELF file structures), and elflint
 (to check for well-formed ELF files).
 
-%package -n	%{libasm}
+%package -n %{libasm}
 Summary:	Libraries to read and write ELF files
 Group:		System/Libraries
 Obsoletes:	%{libname}
@@ -58,32 +58,32 @@ Obsoletes:	%{libname}
 %description -n	%{libasm}
 Included are the helper library which implement machine-specific ELF handling.
 
-%package -n	%{libdw}
+%package -n %{libdw}
 Summary:	Libraries to read and write ELF files
 Group:		System/Libraries
 Obsoletes:	%{libname}
 
-%description -n	%{libdw}
+%description -n %{libdw}
 Included are the helper library which implement DWARF ELF handling.
 
-%package -n	%{libelf}
+%package -n %{libelf}
 Summary:	Libraries to read and write ELF files
 Group:		System/Libraries
 Obsoletes:	%{libname}
 
-%description -n	%{libelf}
+%description -n %{libelf}
 This package provides DSOs which allow reading and writing ELF files
 on a high level.  Third party programs depend on this package to read
 internals of ELF files.  The programs of the elfutils package use it
 also to generate new ELF files.
 
-%package -n	%{devname}
+%package -n %{devname}
 Summary:	Development libraries to handle compiled objects
 Group:		Development/Other
 Requires:	%{libasm} = %{EVRD}
 Requires:	%{libdw} = %{EVRD}
 Requires:	%{libelf} = %{EVRD}
-Provides:	%{name}-devel 
+Provides:	%{name}-devel
 
 %description -n	%{devname}
 This package contains the headers and dynamic libraries to create
@@ -94,11 +94,11 @@ applications for handling compiled objects.
    * libebl provides some higher-level ELF access functionality.
    * libasm provides a programmable assembler interface.
 
-%package -n	%{static}
+%package -n %{static}
 Summary:	Static libraries for development with libelfutils
 Group:		Development/Other
 Requires:	%{devname} = %{EVRD}
-Provides:	%{name}-static-devel 
+Provides:	%{name}-static-devel
 
 %description -n	%{static}
 This package contains the static libraries to create applications for
@@ -138,7 +138,7 @@ popd
 chmod +x %{buildroot}%{_libdir}/lib*.so*
 chmod +x %{buildroot}%{_libdir}/elfutils/lib*.so*
 
-%find_lang %{name} %{name}.lang
+%find_lang %{name}
 
 %files -f %{name}.lang
 %doc NOTES README NEWS TODO
@@ -171,4 +171,3 @@ chmod +x %{buildroot}%{_libdir}/elfutils/lib*.so*
 
 %files -n %{static}
 %{_libdir}/*.a
-
