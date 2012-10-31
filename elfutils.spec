@@ -24,6 +24,7 @@ Source1:	%{SOURCE0}.sig
 # this hasn't been used since 200700 import why keep around
 #Patch0:		elfutils-portability.patch
 Patch1:		elfutils-robustify.patch
+Patch2:		elfutils-0.155-binutils-pr-ld-13621.patch
 
 # mdv patches
 Patch10:	elfutils-0.153-mips_backend.patch
@@ -33,6 +34,7 @@ Patch13:	elfutils-0.152-strip-.GCC.command.line-section.patch
 Patch14:	elfutils-0.153-add-missing-lpthread-linkage.patch
 Patch15:	elfutils_signed_comparison.patch
 Patch17:	elfutils-0.153-dont-fail-on-strip-reloc-check-against-self.patch
+
 BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	glibc-devel
@@ -49,7 +51,7 @@ section sizes of an object or archive file), strip (for discarding
 symbols), readelf (to see the raw ELF file structures), and elflint
 (to check for well-formed ELF files).
 
-%package -n %{libasm}
+%package -n	%{libasm}
 Summary:	Libraries to read and write ELF files
 Group:		System/Libraries
 Obsoletes:	%{libname}
@@ -57,26 +59,26 @@ Obsoletes:	%{libname}
 %description -n	%{libasm}
 Included are the helper library which implement machine-specific ELF handling.
 
-%package -n %{libdw}
+%package -n	%{libdw}
 Summary:	Libraries to read and write ELF files
 Group:		System/Libraries
 Obsoletes:	%{libname}
 
-%description -n %{libdw}
+%description -n	%{libdw}
 Included are the helper library which implement DWARF ELF handling.
 
-%package -n %{libelf}
+%package -n	%{libelf}
 Summary:	Libraries to read and write ELF files
 Group:		System/Libraries
 Obsoletes:	%{libname}
 
-%description -n %{libelf}
+%description -n	%{libelf}
 This package provides DSOs which allow reading and writing ELF files
 on a high level.  Third party programs depend on this package to read
 internals of ELF files.  The programs of the elfutils package use it
 also to generate new ELF files.
 
-%package -n %{devname}
+%package -n	%{devname}
 Summary:	Development libraries to handle compiled objects
 Group:		Development/Other
 Requires:	%{libasm} = %{EVRD}
@@ -93,7 +95,7 @@ applications for handling compiled objects.
    * libebl provides some higher-level ELF access functionality.
    * libasm provides a programmable assembler interface.
 
-%package -n %{static}
+%package -n	%{static}
 Summary:	Static libraries for development with libelfutils
 Group:		Development/Other
 Requires:	%{devname} = %{EVRD}
