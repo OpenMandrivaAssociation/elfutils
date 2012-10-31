@@ -136,9 +136,6 @@ popd
 %install
 %makeinstall_std -C build-%{_target_platform}
 
-chmod +x %{buildroot}%{_libdir}/lib*.so*
-chmod +x %{buildroot}%{_libdir}/elfutils/lib*.so*
-
 %find_lang %{name}
 
 %files -f %{name}.lang
