@@ -1,0 +1,17 @@
+diff -p -up elfutils-0.139/src/elflint.c.sparc_elf32_plt~ elfutils-0.139/src/elflint.c
+--- elfutils-0.139/src/elflint.c.sparc_elf32_plt~	2009-02-11 02:48:28.286522823 -0500
++++ elfutils-0.139/src/elflint.c	2009-02-11 04:12:20.217152809 -0500
+@@ -3669,7 +3669,11 @@ section [%2zu] '%s' has SHF_ALLOC flag n
+ 	    gcc_except_table_scnndx = cnt;
+ 	}
+ 
+-      if (shdr->sh_entsize != 0 && shdr->sh_size % shdr->sh_entsize)
++      size_t scnsize = shdr->sh_size;
++      /* special case of SPARC ELF32 .plt: final single NOP after the last PLT entry */
++      if (!strcmp (scnname, ".plt") && (ehdr->e_machine == EM_SPARC))
++	      scnsize -= 4;
++      if (shdr->sh_entsize != 0 && scnsize % shdr->sh_entsize)
+ 	ERROR (gettext ("\
+ section [%2zu] '%s': size not multiple of entry size\n"),
+ 	       cnt, section_name (ebl, cnt));
+diff -p -up elfutils-0.139/src/strings.c.sparc_elf32_plt~ elfutils-0.139/src/strings.c

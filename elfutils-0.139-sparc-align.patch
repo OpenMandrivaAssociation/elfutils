@@ -1,0 +1,16 @@
+diff -p -up elfutils-0.139/libdw/libdwP.h.sparc_align~ elfutils-0.139/libdw/libdwP.h
+--- elfutils-0.139/libdw/libdwP.h.sparc_align~	2009-01-23 03:48:46.000000000 -0500
++++ elfutils-0.139/libdw/libdwP.h	2009-02-11 04:09:48.778152487 -0500
+@@ -180,7 +180,11 @@ struct Dwarf
+     size_t size;
+     size_t remaining;
+     struct libdw_memblock *prev;
+-    char mem[0];
++    char mem[0]
++#ifdef __sparc__
++    __attribute__((aligned(8)))
++#endif
++    ;
+   } *mem_tail;
+ 
+   /* Default size of allocated memory blocks.  */

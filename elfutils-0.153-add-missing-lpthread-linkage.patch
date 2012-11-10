@@ -1,0 +1,20 @@
+--- elfutils-0.153/src/Makefile.am.lpthread~	2012-03-09 22:33:35.971359417 +0100
++++ elfutils-0.153/src/Makefile.am	2012-03-09 22:33:40.698366617 +0100
+@@ -103,7 +103,7 @@ addr2line_no_Wformat = yes
+ # XXX While the file is not finished, don't warn about this
+ ldgeneric_no_Wunused = yes
+ 
+-readelf_LDADD = $(libdw) $(libebl) $(libelf) $(libeu) $(libmudflap) -ldl
++readelf_LDADD = $(libdw) $(libebl) $(libelf) $(libeu) $(libmudflap) -ldl -lpthread
+ nm_LDADD = $(libdw) $(libebl) $(libelf) $(libeu) $(libmudflap) -ldl \
+ 	   $(demanglelib)
+ size_LDADD = $(libelf) $(libeu) $(libmudflap)
+@@ -114,7 +114,7 @@ if NATIVE_LD
+ ld_LDADD += libld_elf.a
+ endif
+ ld_LDFLAGS = -rdynamic
+-elflint_LDADD  = $(libebl) $(libelf) $(libeu) $(libmudflap) -ldl
++elflint_LDADD  = $(libebl) $(libelf) $(libeu) $(libmudflap) -ldl -lpthread
+ findtextrel_LDADD = $(libdw) $(libelf) $(libmudflap)
+ addr2line_LDADD = $(libdw) $(libelf) $(libmudflap)
+ elfcmp_LDADD = $(libebl) $(libelf) $(libmudflap) -ldl
