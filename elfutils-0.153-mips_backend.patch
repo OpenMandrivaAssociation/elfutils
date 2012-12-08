@@ -1,24 +1,6 @@
-diff -Naur elfutils-0.155/backends/Makefile.am elfutils-0.155.tpg/backends/Makefile.am
---- elfutils-0.155/backends/Makefile.am	2012-08-27 18:29:31.000000000 +0000
-+++ elfutils-0.155.tpg/backends/Makefile.am	2012-09-11 09:59:40.363143656 +0000
-@@ -32,11 +32,11 @@
- 	   -I$(top_srcdir)/libelf -I$(top_srcdir)/libdw
- 
- 
--modules = i386 sh x86_64 ia64 alpha arm sparc ppc ppc64 s390 tilegx
-+modules = i386 sh x86_64 ia64 alpha arm sparc ppc ppc64 s390 tilegx mpis
- libebl_pic = libebl_i386_pic.a libebl_sh_pic.a libebl_x86_64_pic.a \
- 	     libebl_ia64_pic.a libebl_alpha_pic.a libebl_arm_pic.a \
- 	     libebl_sparc_pic.a libebl_ppc_pic.a libebl_ppc64_pic.a \
--	     libebl_s390_pic.a libebl_tilegx_pic.a
-+	     libebl_s390_pic.a libebl_tilegx_pic.a libebl_mips_pic.a
- noinst_LIBRARIES = $(libebl_pic)
- noinst_DATA = $(libebl_pic:_pic.a=.so)
- 
-diff -Naur elfutils-0.155/backends/common-reloc.c elfutils-0.155.tpg/backends/common-reloc.c
---- elfutils-0.155/backends/common-reloc.c	2012-08-27 18:27:31.000000000 +0000
-+++ elfutils-0.155.tpg/backends/common-reloc.c	2012-09-11 09:58:05.113096743 +0000
-@@ -112,11 +112,13 @@
+--- elfutils-0.153/backends/common-reloc.c.0010~	2011-05-14 20:59:55.000000000 +0200
++++ elfutils-0.153/backends/common-reloc.c	2012-03-10 00:08:54.423346156 +0100
+@@ -109,11 +109,13 @@ EBLHOOK(reloc_valid_use) (Elf *elf, int
  }
  
  
@@ -32,7 +14,7 @@ diff -Naur elfutils-0.155/backends/common-reloc.c elfutils-0.155.tpg/backends/co
  
  bool
  EBLHOOK(none_reloc_p) (int reloc)
-@@ -138,7 +140,9 @@
+@@ -135,7 +137,9 @@ EBLHOOK(init_reloc) (Ebl *ebl)
    ebl->reloc_type_name = EBLHOOK(reloc_type_name);
    ebl->reloc_type_check = EBLHOOK(reloc_type_check);
    ebl->reloc_valid_use = EBLHOOK(reloc_valid_use);
@@ -42,9 +24,35 @@ diff -Naur elfutils-0.155/backends/common-reloc.c elfutils-0.155.tpg/backends/co
    ebl->none_reloc_p = EBLHOOK(none_reloc_p);
  #ifndef NO_RELATIVE_RELOC
    ebl->relative_reloc_p = EBLHOOK(relative_reloc_p);
-diff -Naur elfutils-0.155/backends/mips_attrs.c elfutils-0.155.tpg/backends/mips_attrs.c
---- elfutils-0.155/backends/mips_attrs.c	1970-01-01 00:00:00.000000000 +0000
-+++ elfutils-0.155.tpg/backends/mips_attrs.c	2012-09-11 09:58:06.103169371 +0000
+--- elfutils-0.153/backends/Makefile.am.0010~	2012-02-23 11:58:34.000000000 +0100
++++ elfutils-0.153/backends/Makefile.am	2012-03-10 00:08:54.423346156 +0100
+@@ -29,11 +29,12 @@ INCLUDES += -I$(top_srcdir)/libebl -I$(t
+ 	   -I$(top_srcdir)/libelf -I$(top_srcdir)/libdw
+ 
+ 
+-modules = i386 sh x86_64 ia64 alpha arm sparc ppc ppc64 s390
++modules = i386 sh x86_64 ia64 alpha arm sparc ppc ppc64 s390 mips
+ libebl_pic = libebl_i386_pic.a libebl_sh_pic.a libebl_x86_64_pic.a \
+ 	     libebl_ia64_pic.a libebl_alpha_pic.a libebl_arm_pic.a \
+ 	     libebl_sparc_pic.a libebl_ppc_pic.a libebl_ppc64_pic.a \
+-	     libebl_s390_pic.a
++	     libebl_s390_pic.a libebl_mips_pic.a
++
+ noinst_LIBRARIES = $(libebl_pic)
+ noinst_DATA = $(libebl_pic:_pic.a=.so)
+ 
+@@ -95,6 +96,9 @@ s390_SRCS = s390_init.c s390_symbol.c s3
+ libebl_s390_pic_a_SOURCES = $(s390_SRCS)
+ am_libebl_s390_pic_a_OBJECTS = $(s390_SRCS:.c=.os)
+ 
++mips_SRCS = mips_init.c mips_symbol.c mips_regs.c mips_retval.c mips_attrs.c
++libebl_mips_pic_a_SOURCES = $(mips_SRCS)
++am_libebl_mips_pic_a_OBJECTS = $(mips_SRCS:.c=.os)
+ 
+ libebl_%.so libebl_%.map: libebl_%_pic.a $(libelf) $(libdw)
+ 	@rm -f $(@:.so=.map)
+--- elfutils-0.153/backends/mips_attrs.c.0010~	2012-03-10 00:08:54.429346166 +0100
++++ elfutils-0.153/backends/mips_attrs.c	2012-03-10 00:08:54.429346166 +0100
 @@ -0,0 +1,65 @@
 +/* Object attribute tags for PowerPC.
 +   Copyright (C) 2008, 2009 Red Hat, Inc.
@@ -111,9 +119,8 @@ diff -Naur elfutils-0.155/backends/mips_attrs.c elfutils-0.155.tpg/backends/mips
 +  return false;
 +}
 +
-diff -Naur elfutils-0.155/backends/mips_init.c elfutils-0.155.tpg/backends/mips_init.c
---- elfutils-0.155/backends/mips_init.c	1970-01-01 00:00:00.000000000 +0000
-+++ elfutils-0.155.tpg/backends/mips_init.c	2012-09-11 09:58:06.233123507 +0000
+--- elfutils-0.153/backends/mips_init.c.0010~	2012-03-10 00:08:54.423346156 +0100
++++ elfutils-0.153/backends/mips_init.c	2012-03-10 00:08:54.423346156 +0100
 @@ -0,0 +1,66 @@
 +/* Initialization of mips specific backend library.
 +   Copyright (C) 2006 Red Hat, Inc.
@@ -181,9 +188,8 @@ diff -Naur elfutils-0.155/backends/mips_init.c elfutils-0.155.tpg/backends/mips_
 +  HOOK (eh, check_object_attribute);
 +  return MODVERSION;
 +}
-diff -Naur elfutils-0.155/backends/mips_regs.c elfutils-0.155.tpg/backends/mips_regs.c
---- elfutils-0.155/backends/mips_regs.c	1970-01-01 00:00:00.000000000 +0000
-+++ elfutils-0.155.tpg/backends/mips_regs.c	2012-09-11 09:58:06.363140639 +0000
+--- elfutils-0.153/backends/mips_regs.c.0010~	2012-03-10 00:08:54.423346156 +0100
++++ elfutils-0.153/backends/mips_regs.c	2012-03-10 00:08:54.423346156 +0100
 @@ -0,0 +1,104 @@
 +/* Register names and numbers for MIPS DWARF.
 +   Copyright (C) 2006 Red Hat, Inc.
@@ -289,9 +295,8 @@ diff -Naur elfutils-0.155/backends/mips_regs.c elfutils-0.155.tpg/backends/mips_
 +  name[namelen++] = '\0';
 +  return namelen;
 +}
-diff -Naur elfutils-0.155/backends/mips_reloc.def elfutils-0.155.tpg/backends/mips_reloc.def
---- elfutils-0.155/backends/mips_reloc.def	1970-01-01 00:00:00.000000000 +0000
-+++ elfutils-0.155.tpg/backends/mips_reloc.def	2012-09-11 09:58:06.523156670 +0000
+--- elfutils-0.153/backends/mips_reloc.def.0010~	2012-03-10 00:08:54.423346156 +0100
++++ elfutils-0.153/backends/mips_reloc.def	2012-03-10 00:08:54.423346156 +0100
 @@ -0,0 +1,79 @@
 +/* List the relocation types for mips.  -*- C -*-
 +   Copyright (C) 2006 Red Hat, Inc.
@@ -372,9 +377,8 @@ diff -Naur elfutils-0.155/backends/mips_reloc.def elfutils-0.155.tpg/backends/mi
 +
 +#define NO_COPY_RELOC 1
 +#define NO_RELATIVE_RELOC 1
-diff -Naur elfutils-0.155/backends/mips_retval.c elfutils-0.155.tpg/backends/mips_retval.c
---- elfutils-0.155/backends/mips_retval.c	1970-01-01 00:00:00.000000000 +0000
-+++ elfutils-0.155.tpg/backends/mips_retval.c	2012-09-11 09:58:06.653132456 +0000
+--- elfutils-0.153/backends/mips_retval.c.0010~	2012-03-10 00:08:54.424346158 +0100
++++ elfutils-0.153/backends/mips_retval.c	2012-03-10 00:08:54.424346158 +0100
 @@ -0,0 +1,306 @@
 +/* Function return value location for Linux/mips ABI.
 +   Copyright (C) 2005 Red Hat, Inc.
@@ -682,9 +686,8 @@ diff -Naur elfutils-0.155/backends/mips_retval.c elfutils-0.155.tpg/backends/mip
 +     DWARF and might be valid.  */
 +  return -2;
 +}
-diff -Naur elfutils-0.155/backends/mips_symbol.c elfutils-0.155.tpg/backends/mips_symbol.c
---- elfutils-0.155/backends/mips_symbol.c	1970-01-01 00:00:00.000000000 +0000
-+++ elfutils-0.155.tpg/backends/mips_symbol.c	2012-09-11 09:58:06.803138924 +0000
+--- elfutils-0.153/backends/mips_symbol.c.0010~	2012-03-10 00:08:54.424346158 +0100
++++ elfutils-0.153/backends/mips_symbol.c	2012-03-10 00:08:54.424346158 +0100
 @@ -0,0 +1,308 @@
 +/* MIPS specific symbolic name handling.
 +   Copyright (C) 2002, 2003, 2005 Red Hat, Inc.
@@ -994,10 +997,9 @@ diff -Naur elfutils-0.155/backends/mips_symbol.c elfutils-0.155.tpg/backends/mip
 +{
 +	  return (tag >= DT_LOPROC && tag <= DT_LOPROC + DT_MIPS_NUM);
 +}
-diff -Naur elfutils-0.155/libebl/eblmachineflagname.c elfutils-0.155.tpg/libebl/eblmachineflagname.c
---- elfutils-0.155/libebl/eblmachineflagname.c	2012-08-27 18:27:31.000000000 +0000
-+++ elfutils-0.155.tpg/libebl/eblmachineflagname.c	2012-09-11 09:58:07.143175878 +0000
-@@ -71,7 +71,7 @@
+--- elfutils-0.153/libebl/eblmachineflagname.c.0010~	2010-09-29 17:07:37.000000000 +0200
++++ elfutils-0.153/libebl/eblmachineflagname.c	2012-03-10 00:08:54.424346158 +0100
+@@ -92,7 +92,7 @@ ebl_machine_flag_name (ebl, flags, buf,
  	      break;
  	    }
  
@@ -1006,7 +1008,7 @@ diff -Naur elfutils-0.155/libebl/eblmachineflagname.c elfutils-0.155.tpg/libebl/
  	  if ((size_t) (buf + len - cp) < machstrlen)
  	    {
  	      *((char *) mempcpy (cp, machstr, buf + len - cp - 1)) = '\0';
-@@ -83,6 +83,7 @@
+@@ -104,6 +104,7 @@ ebl_machine_flag_name (ebl, flags, buf,
  	  first = 0;
  	}
        while (flags != 0);
@@ -1014,10 +1016,9 @@ diff -Naur elfutils-0.155/libebl/eblmachineflagname.c elfutils-0.155.tpg/libebl/
  
        res = buf;
      }
-diff -Naur elfutils-0.155/libebl/eblopenbackend.c elfutils-0.155.tpg/libebl/eblopenbackend.c
---- elfutils-0.155/libebl/eblopenbackend.c	2012-08-27 18:27:31.000000000 +0000
-+++ elfutils-0.155.tpg/libebl/eblopenbackend.c	2012-09-11 09:58:07.653165581 +0000
-@@ -71,6 +71,8 @@
+--- elfutils-0.153/libebl/eblopenbackend.c.0010~	2012-01-28 20:14:02.000000000 +0100
++++ elfutils-0.153/libebl/eblopenbackend.c	2012-03-10 00:08:54.424346158 +0100
+@@ -91,6 +91,8 @@ static const struct
    { "sparc", "elf_sparc", "sparc", 5, EM_SPARC, 0, 0 },
    { "sparc", "elf_sparcv8plus", "sparc", 5, EM_SPARC32PLUS, 0, 0 },
    { "s390", "ebl_s390", "s390", 4, EM_S390, 0, 0 },
@@ -1026,10 +1027,9 @@ diff -Naur elfutils-0.155/libebl/eblopenbackend.c elfutils-0.155.tpg/libebl/eblo
  
    { "m32", "elf_m32", "m32", 3, EM_M32, 0, 0 },
    { "m68k", "elf_m68k", "m68k", 4, EM_68K, 0, 0 },
-diff -Naur elfutils-0.155/libebl/eblsectionstripp.c elfutils-0.155.tpg/libebl/eblsectionstripp.c
---- elfutils-0.155/libebl/eblsectionstripp.c	2012-08-27 18:27:31.000000000 +0000
-+++ elfutils-0.155.tpg/libebl/eblsectionstripp.c	2012-09-11 09:58:08.063148815 +0000
-@@ -39,6 +39,13 @@
+--- elfutils-0.153/libebl/eblsectionstripp.c.0010~	2010-09-29 17:07:37.000000000 +0200
++++ elfutils-0.153/libebl/eblsectionstripp.c	2012-03-10 00:08:54.425346160 +0100
+@@ -60,6 +60,13 @@ ebl_section_strip_p (Ebl *ebl, const GEl
  		     const char *name, bool remove_comment,
  		     bool only_remove_debug)
  {
@@ -1043,10 +1043,9 @@ diff -Naur elfutils-0.155/libebl/eblsectionstripp.c elfutils-0.155.tpg/libebl/eb
    /* If only debug information should be removed check the name.  There
       is unfortunately no other way.  */
    if (unlikely (only_remove_debug))
-diff -Naur elfutils-0.155/libelf/elf.h elfutils-0.155.tpg/libelf/elf.h
---- elfutils-0.155/libelf/elf.h	2012-08-27 18:27:31.000000000 +0000
-+++ elfutils-0.155.tpg/libelf/elf.h	2012-09-11 09:58:08.663028193 +0000
-@@ -1345,14 +1345,40 @@
+--- elfutils-0.153/libelf/elf.h.0010~	2011-07-19 22:42:41.000000000 +0200
++++ elfutils-0.153/libelf/elf.h	2012-03-10 00:08:54.425346160 +0100
+@@ -1354,14 +1354,40 @@ typedef struct
  
  /* Legal values for e_flags field of Elf32_Ehdr.  */
  
@@ -1095,10 +1094,9 @@ diff -Naur elfutils-0.155/libelf/elf.h elfutils-0.155.tpg/libelf/elf.h
  
  /* Legal values for MIPS architecture level.  */
  
-diff -Naur elfutils-0.155/src/elflint.c elfutils-0.155.tpg/src/elflint.c
---- elfutils-0.155/src/elflint.c	2012-08-27 18:29:10.000000000 +0000
-+++ elfutils-0.155.tpg/src/elflint.c	2012-09-11 09:58:09.093034702 +0000
-@@ -860,9 +860,17 @@
+--- elfutils-0.153/src/elflint.c.0010~	2012-03-10 00:08:54.415346147 +0100
++++ elfutils-0.153/src/elflint.c	2012-03-10 00:08:54.427346164 +0100
+@@ -877,9 +877,17 @@ section [%2d] '%s': symbol %zu does not
  	    }
  	}
  
@@ -1117,7 +1115,7 @@ diff -Naur elfutils-0.155/src/elflint.c elfutils-0.155.tpg/src/elflint.c
  	    ERROR (gettext ("\
  section [%2d] '%s': symbol %zu: local symbol outside range described in sh_info\n"),
  		   idx, section_name (ebl, idx), cnt);
-@@ -877,9 +885,21 @@
+@@ -894,9 +902,21 @@ section [%2d] '%s': symbol %zu: non-loca
  
        if (GELF_ST_TYPE (sym->st_info) == STT_SECTION
  	  && GELF_ST_BIND (sym->st_info) != STB_LOCAL)
@@ -1139,7 +1137,7 @@ diff -Naur elfutils-0.155/src/elflint.c elfutils-0.155.tpg/src/elflint.c
  
        if (name != NULL)
  	{
-@@ -1308,7 +1328,8 @@
+@@ -1332,7 +1352,8 @@ check_one_reloc (Ebl *ebl, GElf_Ehdr *eh
    if (!ebl_reloc_type_check (ebl, GELF_R_TYPE (r_info)))
      ERROR (gettext ("section [%2d] '%s': relocation %zu: invalid type\n"),
  	   idx, section_name (ebl, idx), cnt);
@@ -1149,7 +1147,7 @@ diff -Naur elfutils-0.155/src/elflint.c elfutils-0.155.tpg/src/elflint.c
  	    /* The executable/DSO can contain relocation sections with
  	       all the relocations the linker has applied.  Those sections
  	       are marked non-loaded, though.  */
-@@ -1687,6 +1708,29 @@
+@@ -1714,6 +1735,29 @@ section [%2d] '%s': entry %zu: pointer d
  	    break;
  	  /* FALLTHROUGH */
  
@@ -1179,7 +1177,7 @@ diff -Naur elfutils-0.155/src/elflint.c elfutils-0.155.tpg/src/elflint.c
  	case DT_AUXILIARY:
  	case DT_FILTER:
  	case DT_FINI:
-@@ -1696,7 +1740,6 @@
+@@ -1723,7 +1767,6 @@ section [%2d] '%s': entry %zu: pointer d
  	case DT_INIT_ARRAY:
  	case DT_JMPREL:
  	case DT_PLTGOT:
@@ -1187,7 +1185,7 @@ diff -Naur elfutils-0.155/src/elflint.c elfutils-0.155.tpg/src/elflint.c
  	case DT_RELA:
  	case DT_SYMBOLIC:
  	case DT_SYMTAB:
-@@ -2734,7 +2777,9 @@
+@@ -2790,7 +2833,9 @@ section [%2d] '%s': symbol %d: cannot re
  	{
  	  /* Global symbol.  Make sure it is not defined as local.  */
  	  if (GELF_ST_BIND (sym->st_info) == STB_LOCAL)
@@ -1198,7 +1196,7 @@ diff -Naur elfutils-0.155/src/elflint.c elfutils-0.155.tpg/src/elflint.c
  section [%2d] '%s': symbol %d: local symbol with global scope\n"),
  		   idx, section_name (ebl, idx), cnt);
  	}
-@@ -3472,6 +3517,10 @@
+@@ -3528,6 +3573,10 @@ cannot get section header for section [%
  		    && ebl_bss_plt_p (ebl, ehdr))
  		  good_type = SHT_NOBITS;
  
@@ -1209,7 +1207,7 @@ diff -Naur elfutils-0.155/src/elflint.c elfutils-0.155.tpg/src/elflint.c
  		/* In a debuginfo file, any normal section can be SHT_NOBITS.
  		   This is only invalid for DWARF sections and .shstrtab.  */
  		if (shdr->sh_type != good_type
-@@ -3483,7 +3532,7 @@
+@@ -3539,7 +3588,7 @@ cannot get section header for section [%
  		  ERROR (gettext ("\
  section [%2d] '%s' has wrong type: expected %s, is %s\n"),
  			 (int) cnt, scnname,
@@ -1218,7 +1216,7 @@ diff -Naur elfutils-0.155/src/elflint.c elfutils-0.155.tpg/src/elflint.c
  						stbuf1, sizeof (stbuf1)),
  			 ebl_section_type_name (ebl, shdr->sh_type,
  						stbuf2, sizeof (stbuf2)));
-@@ -3614,7 +3663,10 @@
+@@ -3670,7 +3719,10 @@ section [%2zu] '%s': size not multiple o
  
  #define ALL_SH_FLAGS (SHF_WRITE | SHF_ALLOC | SHF_EXECINSTR | SHF_MERGE \
  		      | SHF_STRINGS | SHF_INFO_LINK | SHF_LINK_ORDER \
@@ -1230,10 +1228,9 @@ diff -Naur elfutils-0.155/src/elflint.c elfutils-0.155.tpg/src/elflint.c
        if (shdr->sh_flags & ~(GElf_Xword) ALL_SH_FLAGS)
  	{
  	  GElf_Xword sh_flags = shdr->sh_flags & ~(GElf_Xword) ALL_SH_FLAGS;
-diff -Naur elfutils-0.155/src/readelf.c elfutils-0.155.tpg/src/readelf.c
---- elfutils-0.155/src/readelf.c	2012-08-27 18:29:31.000000000 +0000
-+++ elfutils-0.155.tpg/src/readelf.c	2012-09-11 09:58:09.653069643 +0000
-@@ -7276,7 +7276,8 @@
+--- elfutils-0.153/src/readelf.c.0010~	2012-03-10 00:08:54.417346149 +0100
++++ elfutils-0.153/src/readelf.c	2012-03-10 00:10:00.028438751 +0100
+@@ -7360,7 +7360,8 @@ print_debug (Dwfl_Module *dwflmod, Ebl *
        GElf_Shdr shdr_mem;
        GElf_Shdr *shdr = gelf_getshdr (scn, &shdr_mem);
  
