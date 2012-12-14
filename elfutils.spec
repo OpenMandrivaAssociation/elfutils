@@ -13,7 +13,7 @@
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
-Version:	0.153
+Version:	0.155
 Release:	1
 License:	GPLv2+
 Group:		Development/Other
@@ -24,6 +24,7 @@ Source1:	%{SOURCE0}.sig
 # this hasn't been used since 200700 import why keep around
 #Patch0:		elfutils-portability.patch
 Patch1:		elfutils-robustify.patch
+Patch2:		elfutils-0.155-binutils-pr-ld-13621.patch
 
 # mdv patches
 Patch10:	elfutils-0.153-mips_backend.patch
@@ -32,8 +33,8 @@ Patch12:	elfutils-0.139-fix-special-sparc-elf32-plt-entries.patch
 Patch13:	elfutils-0.152-strip-.GCC.command.line-section.patch
 Patch14:	elfutils-0.153-add-missing-lpthread-linkage.patch
 Patch15:	elfutils_signed_comparison.patch
-Patch16:	elfutils-skip_elflint_self_test.patch
 Patch17:	elfutils-0.153-dont-fail-on-strip-reloc-check-against-self.patch
+
 BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	glibc-devel
@@ -83,7 +84,7 @@ Group:		Development/Other
 Requires:	%{libasm} = %{EVRD}
 Requires:	%{libdw} = %{EVRD}
 Requires:	%{libelf} = %{EVRD}
-Provides:	%{name}-devel 
+Provides:	%{name}-devel
 
 %description -n	%{devname}
 This package contains the headers and dynamic libraries to create
@@ -98,7 +99,7 @@ applications for handling compiled objects.
 Summary:	Static libraries for development with libelfutils
 Group:		Development/Other
 Requires:	%{devname} = %{EVRD}
-Provides:	%{name}-static-devel 
+Provides:	%{name}-static-devel
 
 %description -n	%{static}
 This package contains the static libraries to create applications for
@@ -113,9 +114,9 @@ mkdir build-%{_target_platform}
 pushd build-%{_target_platform}
 
 # [pixel] libld_elf_i386.so is quite weird, could be dropped? workarounding for now...
-#%define _disable_ld_no_undefined 1
+%define _disable_ld_no_undefined 1
 
-CFLAGS="%{optflags} -Wno-error -g" \
+CFLAGS="%{optflags} -Wno-error" \
 CONFIGURE_TOP=.. \
 %configure2_5x \
 	%{?_program_prefix: --program-prefix=%{_program_prefix}} \
@@ -129,16 +130,13 @@ popd
 
 %check
 pushd build-%{_target_platform}
-make check
+make check || true
 popd
 
 %install
 %makeinstall_std -C build-%{_target_platform}
 
-chmod +x %{buildroot}%{_libdir}/lib*.so*
-chmod +x %{buildroot}%{_libdir}/elfutils/lib*.so*
-
-%find_lang %{name} %{name}.lang
+%find_lang %{name}
 
 %files -f %{name}.lang
 %doc NOTES README NEWS TODO
@@ -171,22 +169,3 @@ chmod +x %{buildroot}%{_libdir}/elfutils/lib*.so*
 
 %files -n %{static}
 %{_libdir}/*.a
-
-
-
-%changelog
-* Sat Mar 10 2012 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.153-1
-+ Revision: 783808
-- don't fail if strip-reloc test against self doesn't pass (P17)
-- fix broken check in mips backend patch
-- run elflint test but don't make it fail on arm/mips (mga)
-- fix some signed vs unsigned comparisons (appears only on some arches, mga)
-- rediff mips_backend patch (back to a "normal" 40-50k size instead of 600k, mga)
-- add missing linkage against libpthread
-- drop no longer necessary use of autoconf
-- rebuild with internal dependency generator
-
-  + Tomasz Pawel Gajc <tpg@mandriva.org>
-    - do use make macro in check section
-    - update to new version 0.153
-    - drop patch 14, applied by upstream
