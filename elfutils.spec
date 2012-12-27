@@ -37,10 +37,9 @@ Patch17:	elfutils-0.153-dont-fail-on-strip-reloc-check-against-self.patch
 
 BuildRequires:	bison
 BuildRequires:	flex
-BuildRequires:	glibc-devel
-BuildRequires:	zlib-devel
+BuildRequires:	pkgconfig(zlib)
 BuildRequires:	bzip2-devel
-BuildRequires:	lzma-devel
+BuildRequires:	pkgconfig(liblzma)
 BuildRequires:	gettext-devel
 Obsoletes:	%{libname}
 
