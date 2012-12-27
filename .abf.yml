@@ -1,2 +1,3 @@
 sources:
-  "elfutils-0.153.tar.bz2": 8f908a121590daa2a18cbddd88393c02725b9eac
+  elfutils-0.155.tar.bz2: 1b96084cd9fe037c1c0bd2c280aaa701f913462b
+  elfutils-0.155.tar.bz2.sig: fcd0ebd029b305bf030983daf151a2a1ab5294af
