@@ -14,7 +14,7 @@
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
 Version:	0.155
-Release:	2
+Release:	3
 License:	GPLv2+
 Group:		Development/Other
 Url:		http://fedorahosted.org/elfutils/
@@ -25,6 +25,7 @@ Source1:	%{SOURCE0}.sig
 #Patch0:		elfutils-portability.patch
 Patch1:		elfutils-robustify.patch
 Patch2:		elfutils-0.155-binutils-pr-ld-13621.patch
+Patch3:		elfutils-0.155-mem-align.patch
 
 # mdv patches
 Patch10:	elfutils-0.155-mips_backend.patch
