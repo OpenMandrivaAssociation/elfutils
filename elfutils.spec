@@ -136,6 +136,11 @@ popd
 %install
 %makeinstall_std -C build-%{_target_platform}
 
+mkdir %{buildroot}/%{_lib}
+mv %{buildroot}%{_libdir}/libelf.so.%{major} %{buildroot}%{_libdir}/libelf-%{version}.so %{buildroot}/%{_lib}
+ln -srf %{buildroot}/%{_lib}/libelf.so.%{major} %{buildroot}%{_libdir}/libelf.so
+
+
 %find_lang %{name}
 
 %files -f %{name}.lang
@@ -145,8 +150,8 @@ popd
 %{_libdir}/elfutils/lib*.so
 
 %files -n %{libelf}
-%{_libdir}/libelf-%{version}.so
-%{_libdir}/libelf*.so.%{major}*
+/%{_lib}/libelf-%{version}.so
+/%{_lib}/libelf*.so.%{major}*
 
 %files -n %{libdw}
 %{_libdir}/libdw-%{version}.so
