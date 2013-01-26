@@ -14,7 +14,7 @@
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
 Version:	0.155
-Release:	4
+Release:	5
 License:	GPLv2+
 Group:		Development/Other
 Url:		http://fedorahosted.org/elfutils/
@@ -72,6 +72,8 @@ Summary:	Libraries to read and write ELF files
 Group:		System/Libraries
 Obsoletes:	%{libname} < 0.155
 Provides:	%{libname} = %{EVRD}
+Requires:	%{libdw} = %{EVRD}
+Requires:	%{libasm} = %{EVRD}
 
 %description -n	%{libelf}
 This package provides DSOs which allow reading and writing ELF files
