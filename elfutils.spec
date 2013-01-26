@@ -14,7 +14,7 @@
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
 Version:	0.155
-Release:	3
+Release:	4
 License:	GPLv2+
 Group:		Development/Other
 Url:		http://fedorahosted.org/elfutils/
@@ -42,7 +42,7 @@ BuildRequires:	pkgconfig(zlib)
 BuildRequires:	bzip2-devel
 BuildRequires:	pkgconfig(liblzma)
 BuildRequires:	gettext-devel
-Obsoletes:	%{libname}
+Obsoletes:		%{libname} < 0.155
 
 %description
 Elfutils is a collection of utilities, including ld (a linker),
@@ -54,7 +54,7 @@ symbols), readelf (to see the raw ELF file structures), and elflint
 %package -n	%{libasm}
 Summary:	Libraries to read and write ELF files
 Group:		System/Libraries
-Obsoletes:	%{libname}
+Obsoletes:	%{libname} < 0.155
 
 %description -n	%{libasm}
 Included are the helper library which implement machine-specific ELF handling.
@@ -62,7 +62,7 @@ Included are the helper library which implement machine-specific ELF handling.
 %package -n	%{libdw}
 Summary:	Libraries to read and write ELF files
 Group:		System/Libraries
-Obsoletes:	%{libname}
+Obsoletes:	%{libname} < 0.155
 
 %description -n	%{libdw}
 Included are the helper library which implement DWARF ELF handling.
@@ -70,7 +70,8 @@ Included are the helper library which implement DWARF ELF handling.
 %package -n	%{libelf}
 Summary:	Libraries to read and write ELF files
 Group:		System/Libraries
-Obsoletes:	%{libname}
+Obsoletes:	%{libname} < 0.155
+Provides:	%{libname} = %{version} - %{release}
 
 %description -n	%{libelf}
 This package provides DSOs which allow reading and writing ELF files
