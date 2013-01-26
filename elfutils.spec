@@ -71,7 +71,7 @@ Included are the helper library which implement DWARF ELF handling.
 Summary:	Libraries to read and write ELF files
 Group:		System/Libraries
 Obsoletes:	%{libname} < 0.155
-Provides:	%{libname} = %{version} - %{release}
+Provides:	%{libname} = %{EVRD}
 
 %description -n	%{libelf}
 This package provides DSOs which allow reading and writing ELF files
