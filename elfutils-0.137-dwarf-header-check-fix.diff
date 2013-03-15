@@ -1,0 +1,31 @@
+From: Takashi Iwai <tiwai@novell.com>
+Subject: Fix for kernel debuginfo files
+References: https://bugzilla.novell.com/show_bug.cgi?id=468247, comments 17-20
+References: https://bugzilla.novell.com/show_bug.cgi?id=433182
+
+Above BZ originally occured with Systemtap testsuite (stmt_rel.exp).
+
+# stap -e 'probe kernel.statement("bio_put@fs/bio.c:*") {}'
+semantic error: libdw failure (dwarf_getsrcfiles): invalid DWARF
+...
+---
+
+
+ libdw/dwarf_getsrclines.c |    2 ++
+ 1 file changed, 2 insertions(+)
+
+Index: elfutils-0.155/libdw/dwarf_getsrclines.c
+===================================================================
+--- elfutils-0.155.orig/libdw/dwarf_getsrclines.c
++++ elfutils-0.155/libdw/dwarf_getsrclines.c
+@@ -296,8 +296,10 @@ dwarf_getsrclines (Dwarf_Die *cudie, Dwa
+       /* Consistency check.  */
+       if (unlikely (linep != header_start + header_length))
+ 	{
++#if 0
+ 	  __libdw_seterrno (DWARF_E_INVALID_DWARF);
+ 	  goto out;
++#endif
+ 	}
+ 
+         /* We are about to process the statement program.  Initialize the

@@ -1,0 +1,203 @@
+Index: elfutils-0.155/config/config.guess
+===================================================================
+--- elfutils-0.155.orig/config/config.guess
++++ elfutils-0.155/config/config.guess
+@@ -17,9 +17,7 @@ timestamp='2012-01-01'
+ # General Public License for more details.
+ #
+ # You should have received a copy of the GNU General Public License
+-# along with this program; if not, write to the Free Software
+-# Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA
+-# 02110-1301, USA.
++# along with this program; if not, see <http://www.gnu.org/licenses/>.
+ #
+ # As a special exception to the GNU General Public License, if you
+ # distribute this file as part of a program that contains a
+@@ -202,6 +200,10 @@ case "${UNAME_MACHINE}:${UNAME_SYSTEM}:$
+ 	# CPU_TYPE-MANUFACTURER-OPERATING_SYSTEM is used.
+ 	echo "${machine}-${os}${release}"
+ 	exit ;;
++    *:Bitrig:*:*)
++	UNAME_MACHINE_ARCH=`arch | sed 's/Bitrig.//'`
++	echo ${UNAME_MACHINE_ARCH}-unknown-bitrig${UNAME_RELEASE}
++	exit ;;
+     *:OpenBSD:*:*)
+ 	UNAME_MACHINE_ARCH=`arch | sed 's/OpenBSD.//'`
+ 	echo ${UNAME_MACHINE_ARCH}-unknown-openbsd${UNAME_RELEASE}
+@@ -279,7 +281,10 @@ case "${UNAME_MACHINE}:${UNAME_SYSTEM}:$
+ 	# Should we change UNAME_MACHINE based on the output of uname instead
+ 	# of the specific Alpha model?
+ 	echo alpha-pc-interix
+-	exit ;;
++	# Reset EXIT trap before exiting to avoid spurious non-zero exit code.
++	exitcode=$?
++	trap '' 0
++	exit $exitcode ;;
+     21064:Windows_NT:50:3)
+ 	echo alpha-dec-winnt3.5
+ 	exit ;;
+@@ -863,6 +868,13 @@ EOF
+     i*86:Minix:*:*)
+ 	echo ${UNAME_MACHINE}-pc-minix
+ 	exit ;;
++    aarch64:Linux:*:*)
++	echo ${UNAME_MACHINE}-unknown-linux-gnu
++	exit ;;
++    aarch64_be:Linux:*:*)
++	UNAME_MACHINE=aarch64_be
++	echo ${UNAME_MACHINE}-unknown-linux-gnu
++	exit ;;
+     alpha:Linux:*:*)
+ 	case `sed -n '/^cpu model/s/^.*: \(.*\)/\1/p' < /proc/cpuinfo` in
+ 	  EV5)   UNAME_MACHINE=alphaev5 ;;
+@@ -1196,6 +1208,9 @@ EOF
+     BePC:Haiku:*:*)	# Haiku running on Intel PC compatible.
+ 	echo i586-pc-haiku
+ 	exit ;;
++    x86_64:Haiku:*:*)
++	echo x86_64-unknown-haiku
++	exit ;;
+     SX-4:SUPER-UX:*:*)
+ 	echo sx4-nec-superux${UNAME_RELEASE}
+ 	exit ;;
+@@ -1251,7 +1266,10 @@ EOF
+     NEO-?:NONSTOP_KERNEL:*:*)
+ 	echo neo-tandem-nsk${UNAME_RELEASE}
+ 	exit ;;
+-    NSE-?:NONSTOP_KERNEL:*:*)
++    NEO-?:NONSTOP_KERNEL:*:*)
++	echo neo-tandem-nsk${UNAME_RELEASE}
++	exit ;;
++    NSE-*:NONSTOP_KERNEL:*:*)
+ 	echo nse-tandem-nsk${UNAME_RELEASE}
+ 	exit ;;
+     NSR-?:NONSTOP_KERNEL:*:*)
+@@ -1320,11 +1338,11 @@ EOF
+     i*86:AROS:*:*)
+ 	echo ${UNAME_MACHINE}-pc-aros
+ 	exit ;;
++    x86_64:VMkernel:*:*)
++	echo ${UNAME_MACHINE}-unknown-esx
++	exit ;;
+ esac
+ 
+-#echo '(No uname command or uname output not recognized.)' 1>&2
+-#echo "${UNAME_MACHINE}:${UNAME_SYSTEM}:${UNAME_RELEASE}:${UNAME_VERSION}" 1>&2
+-
+ eval $set_cc_for_build
+ cat >$dummy.c <<EOF
+ #ifdef _SEQUENT_
+Index: elfutils-0.155/config/config.sub
+===================================================================
+--- elfutils-0.155.orig/config/config.sub
++++ elfutils-0.155/config/config.sub
+@@ -21,9 +21,7 @@ timestamp='2012-01-01'
+ # GNU General Public License for more details.
+ #
+ # You should have received a copy of the GNU General Public License
+-# along with this program; if not, write to the Free Software
+-# Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA
+-# 02110-1301, USA.
++# along with this program; if not, see <http://www.gnu.org/licenses/>.
+ #
+ # As a special exception to the GNU General Public License, if you
+ # distribute this file as part of a program that contains a
+@@ -223,6 +221,12 @@ case $os in
+ 	-isc*)
+ 		basic_machine=`echo $1 | sed -e 's/86-.*/86-pc/'`
+ 		;;
++	-lynx*178)
++		os=-lynxos178
++		;;
++	-lynx*5)
++		os=-lynxos5
++		;;
+ 	-lynx*)
+ 		os=-lynxos
+ 		;;
+@@ -341,6 +345,21 @@ case $basic_machine in
+ 		basic_machine=armel-unknown
+ 		;;
+ 
++	strongarm | thumb | xscale)
++		basic_machine=arm-unknown
++		;;
++	xgate)
++		basic_machine=$basic_machine-unknown
++		os=-none
++		;;
++	xscaleeb)
++		basic_machine=armeb-unknown
++		;;
++
++	xscaleel)
++		basic_machine=armel-unknown
++		;;
++
+ 	# We use `pc' rather than `unknown'
+ 	# because (1) that's what they normally are, and
+ 	# (2) the word "unknown" tends to confuse beginning users.
+@@ -818,6 +837,10 @@ case $basic_machine in
+ 		basic_machine=i386-pc
+ 		os=-msys
+ 		;;
++	msys)
++		basic_machine=i386-pc
++		os=-msys
++		;;
+ 	mvs)
+ 		basic_machine=i370-ibm
+ 		os=-mvs
+@@ -826,6 +849,10 @@ case $basic_machine in
+ 		basic_machine=le32-unknown
+ 		os=-nacl
+ 		;;
++	nacl)
++		basic_machine=le32-unknown
++		os=-nacl
++		;;
+ 	ncr3000)
+ 		basic_machine=i486-ncr
+ 		os=-sysv4
+@@ -896,6 +923,12 @@ case $basic_machine in
+ 	nse-tandem)
+ 		basic_machine=nse-tandem
+ 		;;
++	neo-tandem)
++		basic_machine=neo-tandem
++		;;
++	nse-tandem)
++		basic_machine=nse-tandem
++		;;
+ 	nsr-tandem)
+ 		basic_machine=nsr-tandem
+ 		;;
+@@ -1078,6 +1111,9 @@ case $basic_machine in
+ 	strongarm-* | thumb-*)
+ 		basic_machine=arm-`echo $basic_machine | sed 's/^[^-]*-//'`
+ 		;;
++	strongarm-* | thumb-*)
++		basic_machine=arm-`echo $basic_machine | sed 's/^[^-]*-//'`
++		;;
+ 	sun2)
+ 		basic_machine=m68000-sun
+ 		;;
+@@ -1208,6 +1244,9 @@ case $basic_machine in
+ 	xscale-* | xscalee[bl]-*)
+ 		basic_machine=`echo $basic_machine | sed 's/^xscale/arm/'`
+ 		;;
++	xscale-* | xscalee[bl]-*)
++		basic_machine=`echo $basic_machine | sed 's/^xscale/arm/'`
++		;;
+ 	ymp)
+ 		basic_machine=ymp-cray
+ 		os=-unicos
+@@ -1490,6 +1529,8 @@ case $os in
+ 		;;
+ 	-nacl*)
+ 		;;
++	-nacl*)
++		;;
+ 	-none)
+ 		;;
+ 	*)

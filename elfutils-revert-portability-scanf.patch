@@ -1,0 +1,31 @@
+Index: elfutils-0.155/tests/line2addr.c
+===================================================================
+--- elfutils-0.155.orig/tests/line2addr.c
++++ elfutils-0.155/tests/line2addr.c
+@@ -124,7 +124,7 @@ main (int argc, char *argv[])
+     {
+       struct args a = { .arg = argv[cnt] };
+ 
+-      switch (sscanf (a.arg, "%m[^:]:%d", &a.file, &a.line))
++      switch (sscanf (a.arg, "%a[^:]:%d", &a.file, &a.line))
+ 	{
+ 	default:
+ 	case 0:
+Index: elfutils-0.155/src/addr2line.c
+===================================================================
+--- elfutils-0.155.orig/src/addr2line.c
++++ elfutils-0.155/src/addr2line.c
+@@ -447,10 +447,10 @@ handle_address (const char *string, Dwfl
+       bool parsed = false;
+       int i, j;
+       char *name = NULL;
+-      if (sscanf (string, "(%m[^)])%" PRIiMAX "%n", &name, &addr, &i) == 2
++      if (sscanf (string, "(%a[^)])%" PRIiMAX "%n", &name, &addr, &i) == 2
+ 	  && string[i] == '\0')
+ 	parsed = adjust_to_section (name, &addr, dwfl);
+-      switch (sscanf (string, "%m[^-+]%n%" PRIiMAX "%n", &name, &i, &addr, &j))
++      switch (sscanf (string, "%a[^-+]%n%" PRIiMAX "%n", &name, &i, &addr, &j))
+ 	{
+ 	default:
+ 	  break;
+

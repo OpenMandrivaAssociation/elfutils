@@ -26,6 +26,12 @@ Source1:	%{SOURCE0}.sig
 Patch1:		elfutils-robustify.patch
 Patch2:		elfutils-0.155-binutils-pr-ld-13621.patch
 Patch3:		elfutils-0.155-mem-align.patch
+Patch4:         elfutils-no-po-test-build.diff
+Patch5:         libebl-prototype-fix.diff
+Patch6:         elfutils-uninitialized.diff
+Patch7:         elfutils-0.137-dwarf-header-check-fix.diff
+Patch8:         elfutils-0.148-dont-crash.diff
+Patch9:         elfutils-revert-portability-scanf.patch
 
 # mdv patches
 Patch10:	elfutils-0.155-mips_backend.patch
@@ -35,6 +41,7 @@ Patch13:	elfutils-0.152-strip-.GCC.command.line-section.patch
 Patch14:	elfutils-0.153-add-missing-lpthread-linkage.patch
 Patch15:	elfutils_signed_comparison.patch
 Patch17:	elfutils-0.153-dont-fail-on-strip-reloc-check-against-self.patch
+Patch18:	elfutils-aarch64.patch
 
 BuildRequires:	bison
 BuildRequires:	flex
@@ -113,6 +120,7 @@ handling compiled objects.
 %apply_patches
 
 %build
+autoreconf -fi
 mkdir build-%{_target_platform}
 pushd build-%{_target_platform}
 
