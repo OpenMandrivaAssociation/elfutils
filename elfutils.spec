@@ -26,7 +26,7 @@ Source1:	%{SOURCE0}.sig
 Patch1:		elfutils-robustify.patch
 Patch2:		elfutils-0.155-binutils-pr-ld-13621.patch
 Patch3:		elfutils-0.155-mem-align.patch
-Patch4:         elfutils-no-po-test-build.diff
+#Patch4:         elfutils-no-po-test-build.diff
 Patch5:         libebl-prototype-fix.diff
 Patch6:         elfutils-uninitialized.diff
 Patch7:         elfutils-0.137-dwarf-header-check-fix.diff
