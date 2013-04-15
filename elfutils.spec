@@ -45,11 +45,11 @@ Patch18:	elfutils-aarch64.patch
 
 BuildRequires:	bison
 BuildRequires:	flex
-BuildRequires:	pkgconfig(zlib)
 BuildRequires:	bzip2-devel
-BuildRequires:	pkgconfig(liblzma)
 BuildRequires:	gettext-devel
-Obsoletes:		%{libname} < 0.155
+BuildRequires:	pkgconfig(liblzma)
+BuildRequires:	pkgconfig(zlib)
+Obsoletes:	%{libname} < 0.155
 
 %description
 Elfutils is a collection of utilities, including ld (a linker),
@@ -151,7 +151,6 @@ mkdir %{buildroot}/%{_lib}
 mv %{buildroot}%{_libdir}/libelf.so.%{major} %{buildroot}%{_libdir}/libelf-%{version}.so %{buildroot}/%{_lib}
 ln -srf %{buildroot}/%{_lib}/libelf.so.%{major} %{buildroot}%{_libdir}/libelf.so
 
-
 %find_lang %{name}
 
 %files -f %{name}.lang
@@ -185,3 +184,4 @@ ln -srf %{buildroot}/%{_lib}/libelf.so.%{major} %{buildroot}%{_libdir}/libelf.so
 
 %files -n %{static}
 %{_libdir}/*.a
+
