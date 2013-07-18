@@ -1,4 +1,4 @@
-%define	major	1
+%define	major 1
 
 #the old name was _libelfutils1
 %define	libname	%mklibname %{name} %{major}
@@ -14,7 +14,7 @@
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
 Version:	0.155
-Release:	5
+Release:	6
 License:	GPLv2+
 Group:		Development/Other
 Url:		http://fedorahosted.org/elfutils/
