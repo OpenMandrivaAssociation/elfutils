@@ -13,17 +13,16 @@
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
-Version:	0.155
-Release:	6
+Version:	0.156
+Release:	1
 License:	GPLv2+
 Group:		Development/Other
 Url:		http://fedorahosted.org/elfutils/
-Source0:	http://fedorahosted.org/releases/e/l/elfutils/%{name}-%{version}.tar.bz2
-Source1:	%{SOURCE0}.sig
+Source0:	https://fedorahosted.org/releases/e/l/elfutils/%{version}/%{name}-%{version}.tar.bz2
 # these 2 patches are from ftp://sources.redhat.com/pub/systemtap/elfutils/ 
 # this hasn't been used since 200700 import why keep around
-#Patch0:		elfutils-portability.patch
-Patch1:		elfutils-robustify.patch
+#Patch0:	https://fedorahosted.org/releases/e/l/elfutils/%{version}/elfutils-portability.patch
+Patch1:		https://fedorahosted.org/releases/e/l/elfutils/%{version}/elfutils-robustify.patch
 Patch2:		elfutils-0.155-binutils-pr-ld-13621.patch
 Patch3:		elfutils-0.155-mem-align.patch
 #Patch4:         elfutils-no-po-test-build.diff
@@ -184,4 +183,3 @@ ln -srf %{buildroot}/%{_lib}/libelf.so.%{major} %{buildroot}%{_libdir}/libelf.so
 
 %files -n %{static}
 %{_libdir}/*.a
-
