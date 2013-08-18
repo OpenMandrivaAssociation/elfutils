@@ -39,7 +39,7 @@ Patch13:	elfutils-0.152-strip-.GCC.command.line-section.patch
 Patch14:	elfutils-0.153-add-missing-lpthread-linkage.patch
 #Patch15:	elfutils_signed_comparison.patch
 #Patch17:	elfutils-0.153-dont-fail-on-strip-reloc-check-against-self.patch
-Patch18:	elfutils-aarch64.patch
+#Patch18:	elfutils-aarch64.patch
 
 BuildRequires:	bison
 BuildRequires:	flex
