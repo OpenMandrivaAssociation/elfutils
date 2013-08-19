@@ -14,7 +14,7 @@
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
 Version:	0.156
-Release:	1
+Release:	2
 License:	GPLv2+
 Group:		Development/Other
 Url:		http://fedorahosted.org/elfutils/
@@ -132,7 +132,8 @@ CONFIGURE_TOP=.. \
 	--enable-thread-safety \
 	--with-zlib \
 	--with-bzlib \
-	--with-lzma
+	--with-lzma \
+    --enable-static
 
 %make
 popd
