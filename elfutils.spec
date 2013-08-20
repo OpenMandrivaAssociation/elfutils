@@ -13,19 +13,17 @@
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
-Version:	0.155
-Release:	6
+Version:	0.156
+Release:	2
 License:	GPLv2+
 Group:		Development/Other
 Url:		http://fedorahosted.org/elfutils/
-Source0:	http://fedorahosted.org/releases/e/l/elfutils/%{name}-%{version}.tar.bz2
-Source1:	%{SOURCE0}.sig
+Source0:	https://fedorahosted.org/releases/e/l/elfutils/%{version}/%{name}-%{version}.tar.bz2
 # these 2 patches are from ftp://sources.redhat.com/pub/systemtap/elfutils/ 
 # this hasn't been used since 200700 import why keep around
-#Patch0:		elfutils-portability.patch
-Patch1:		elfutils-robustify.patch
-Patch2:		elfutils-0.155-binutils-pr-ld-13621.patch
-Patch3:		elfutils-0.155-mem-align.patch
+#Patch0:	https://fedorahosted.org/releases/e/l/elfutils/%{version}/elfutils-portability.patch
+Patch1:		https://fedorahosted.org/releases/e/l/elfutils/%{version}/elfutils-robustify.patch
+#Patch2:		elfutils-0.155-binutils-pr-ld-13621.patch
 #Patch4:         elfutils-no-po-test-build.diff
 Patch5:         libebl-prototype-fix.diff
 Patch6:         elfutils-uninitialized.diff
@@ -39,9 +37,9 @@ Patch11:	elfutils-0.139-sparc-align.patch
 Patch12:	elfutils-0.139-fix-special-sparc-elf32-plt-entries.patch
 Patch13:	elfutils-0.152-strip-.GCC.command.line-section.patch
 Patch14:	elfutils-0.153-add-missing-lpthread-linkage.patch
-Patch15:	elfutils_signed_comparison.patch
-Patch17:	elfutils-0.153-dont-fail-on-strip-reloc-check-against-self.patch
-Patch18:	elfutils-aarch64.patch
+#Patch15:	elfutils_signed_comparison.patch
+#Patch17:	elfutils-0.153-dont-fail-on-strip-reloc-check-against-self.patch
+#Patch18:	elfutils-aarch64.patch
 
 BuildRequires:	bison
 BuildRequires:	flex
@@ -134,7 +132,8 @@ CONFIGURE_TOP=.. \
 	--enable-thread-safety \
 	--with-zlib \
 	--with-bzlib \
-	--with-lzma
+	--with-lzma \
+    --enable-static
 
 %make
 popd
@@ -184,4 +183,3 @@ ln -srf %{buildroot}/%{_lib}/libelf.so.%{major} %{buildroot}%{_libdir}/libelf.so
 
 %files -n %{static}
 %{_libdir}/*.a
-
