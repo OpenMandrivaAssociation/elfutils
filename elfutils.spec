@@ -13,8 +13,8 @@
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
-Version:	0.156
-Release:	2
+Version:	0.157
+Release:	1
 License:	GPLv2+
 Group:		Development/Other
 Url:		http://fedorahosted.org/elfutils/
@@ -32,7 +32,7 @@ Patch8:         elfutils-0.148-dont-crash.diff
 Patch9:         elfutils-revert-portability-scanf.patch
 
 # mdv patches
-Patch10:	elfutils-0.155-mips_backend.patch
+#Patch10:	elfutils-0.155-mips_backend.patch
 Patch11:	elfutils-0.139-sparc-align.patch
 Patch12:	elfutils-0.139-fix-special-sparc-elf32-plt-entries.patch
 Patch13:	elfutils-0.152-strip-.GCC.command.line-section.patch
