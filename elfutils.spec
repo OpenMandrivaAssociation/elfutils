@@ -14,7 +14,7 @@
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
 Version:	0.157
-Release:	3
+Release:	4
 License:	GPLv2+
 Group:		Development/Other
 Url:		http://fedorahosted.org/elfutils/
