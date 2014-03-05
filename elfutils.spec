@@ -13,8 +13,8 @@
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
-Version:	0.157
-Release:	5
+Version:	0.158
+Release:	1
 License:	GPLv2+
 Group:		Development/Other
 Url:		http://fedorahosted.org/elfutils/
@@ -25,7 +25,6 @@ Source0:	https://fedorahosted.org/releases/e/l/elfutils/%{version}/%{name}-%{ver
 Patch1:		https://fedorahosted.org/releases/e/l/elfutils/%{version}/elfutils-robustify.patch
 #Patch2:		elfutils-0.155-binutils-pr-ld-13621.patch
 #Patch4:         elfutils-no-po-test-build.diff
-Patch5:         libebl-prototype-fix.diff
 Patch6:         elfutils-uninitialized.diff
 Patch7:         elfutils-0.137-dwarf-header-check-fix.diff
 Patch8:         elfutils-0.148-dont-crash.diff
