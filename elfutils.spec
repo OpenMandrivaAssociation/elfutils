@@ -130,7 +130,8 @@ CONFIGURE_TOP=.. \
 	--enable-thread-safety \
 	--with-zlib \
 	--with-bzlib \
-	--with-lzma
+	--with-lzma \
+	--enable-dwz
 
 %make
 popd
