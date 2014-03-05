@@ -31,14 +31,13 @@ Patch8:         elfutils-0.148-dont-crash.diff
 Patch9:         elfutils-revert-portability-scanf.patch
 
 # mdv patches
-#Patch10:	elfutils-0.155-mips_backend.patch
+Patch10:	elfutils-0.158-mips_backend.patch
 Patch11:	elfutils-0.139-sparc-align.patch
 Patch12:	elfutils-0.139-fix-special-sparc-elf32-plt-entries.patch
 Patch13:	elfutils-0.152-strip-.GCC.command.line-section.patch
 Patch14:	elfutils-0.153-add-missing-lpthread-linkage.patch
-#Patch15:	elfutils_signed_comparison.patch
-#Patch17:	elfutils-0.153-dont-fail-on-strip-reloc-check-against-self.patch
-#Patch18:	elfutils-aarch64.patch
+Patch15:	elfutils_signed_comparison.patch
+Patch17:	elfutils-0.158-dont-fail-on-strip-reloc-check-against-self.patch
 
 BuildRequires:	bison
 BuildRequires:	flex
@@ -132,7 +131,7 @@ CONFIGURE_TOP=.. \
 	--with-zlib \
 	--with-bzlib \
 	--with-lzma \
-    --enable-static
+	--enable-static
 
 %make
 popd

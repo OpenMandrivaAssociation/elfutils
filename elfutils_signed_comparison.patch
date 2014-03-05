@@ -1,26 +1,20 @@
----
- src/readelf.c |    4 	2 +	2 -	0 !
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-Index: elfutils-0.150/src/readelf.c
-===================================================================
---- elfutils-0.150.orig/src/readelf.c	2011-01-15 17:43:36.000000000 +0100
-+++ elfutils-0.150/src/readelf.c	2011-01-15 18:11:56.000000000 +0100
-@@ -4603,7 +4603,7 @@ print_debug_ranges_section (Dwfl_Module 
+--- elfutils-0.158/src/readelf.c.0015~	2014-03-05 14:53:55.799416858 +0100
++++ elfutils-0.158/src/readelf.c	2014-03-05 14:56:31.739418530 +0100
+@@ -4685,7 +4685,7 @@ print_debug_ranges_section (Dwfl_Module
  				      offset, &readp, endp))
  	continue;
  
--      if (unlikely (data->d_size - offset < address_size * 2))
-+      if (unlikely ((uint_fast8_t)(data->d_size - offset) < address_size * 2))
+-      if (unlikely (data->d_size - offset < (size_t) address_size * 2))
++      if (unlikely ((uint_fast8_t)(data->d_size - offset) < (size_t) address_size * 2))
  	{
  	  printf (gettext (" [%6tx]  <INVALID DATA>\n"), offset);
  	  break;
-@@ -6374,7 +6374,7 @@ print_debug_loc_section (Dwfl_Module *dw
- 				      offset, &readp, endp))
+@@ -6601,7 +6601,7 @@ print_debug_loc_section (Dwfl_Module *dw
+ 				      &cu, offset, &readp, endp))
  	continue;
  
--      if (unlikely (data->d_size - offset < address_size * 2))
-+      if (unlikely ((uint_fast8_t)(data->d_size - offset) < address_size * 2))
+-      if (unlikely (data->d_size - offset < (size_t) address_size * 2))
++      if (unlikely ((uint_fast8_t)(data->d_size - offset) < (size_t) address_size * 2))
  	{
  	  printf (gettext (" [%6tx]  <INVALID DATA>\n"), offset);
  	  break;

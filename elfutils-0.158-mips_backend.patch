@@ -1,39 +1,6 @@
----
- backends/Makefile.am        |    8 	6 +	2 -	0 !
- backends/common-reloc.c     |    4 	4 +	0 -	0 !
- backends/mips_attrs.c       |   65 	65 +	0 -	0 !
- backends/mips_init.c        |   66 	66 +	0 -	0 !
- backends/mips_regs.c        |  104 	104 +	0 -	0 !
- backends/mips_reloc.def     |   79 	79 +	0 -	0 !
- backends/mips_retval.c      |  306 	306 +	0 -	0 !
- backends/mips_symbol.c      |  308 	308 +	0 -	0 !
- libebl/eblmachineflagname.c |    3 	2 +	1 -	0 !
- libebl/eblopenbackend.c     |    2 	2 +	0 -	0 !
- libebl/eblsectionstripp.c   |    7 	7 +	0 -	0 !
- libelf/elf.h                |   42 	34 +	8 -	0 !
- src/elflint.c               |   64 	58 +	6 -	0 !
- src/readelf.c               |    3 	2 +	1 -	0 !
- 14 files changed, 1043 insertions(+), 18 deletions(-)
-
-Index: elfutils-0.155/backends/Makefile.am
-===================================================================
---- elfutils-0.155.orig/backends/Makefile.am
-+++ elfutils-0.155/backends/Makefile.am
-@@ -32,11 +32,11 @@ INCLUDES += -I$(top_srcdir)/libebl -I$(t
- 	   -I$(top_srcdir)/libelf -I$(top_srcdir)/libdw
- 
- 
--modules = i386 sh x86_64 ia64 alpha arm sparc ppc ppc64 s390 tilegx
-+modules = i386 sh x86_64 ia64 alpha arm sparc ppc ppc64 s390 tilegx mips
- libebl_pic = libebl_i386_pic.a libebl_sh_pic.a libebl_x86_64_pic.a \
- 	     libebl_ia64_pic.a libebl_alpha_pic.a libebl_arm_pic.a \
- 	     libebl_sparc_pic.a libebl_ppc_pic.a libebl_ppc64_pic.a \
--	     libebl_s390_pic.a libebl_tilegx_pic.a
-+	     libebl_s390_pic.a libebl_tilegx_pic.a libebl_mips_pic.a
- noinst_LIBRARIES = $(libebl_pic)
- noinst_DATA = $(libebl_pic:_pic.a=.so)
- 
-@@ -103,6 +103,9 @@ tilegx_SRCS = tilegx_init.c tilegx_symbo
+--- elfutils-0.158/backends/Makefile.am.0010~	2014-01-06 09:26:31.000000000 +0100
++++ elfutils-0.158/backends/Makefile.am	2014-03-05 14:50:47.209414835 +0100
+@@ -116,6 +116,9 @@ tilegx_SRCS = tilegx_init.c tilegx_symbo
  libebl_tilegx_pic_a_SOURCES = $(tilegx_SRCS)
  am_libebl_tilegx_pic_a_OBJECTS = $(tilegx_SRCS:.c=.os)
  
@@ -43,10 +10,8 @@ Index: elfutils-0.155/backends/Makefile.am
  
  libebl_%.so libebl_%.map: libebl_%_pic.a $(libelf) $(libdw)
  	@rm -f $(@:.so=.map)
-Index: elfutils-0.155/backends/common-reloc.c
-===================================================================
---- elfutils-0.155.orig/backends/common-reloc.c
-+++ elfutils-0.155/backends/common-reloc.c
+--- elfutils-0.158/backends/common-reloc.c.0010~	2012-12-14 23:40:47.000000000 +0100
++++ elfutils-0.158/backends/common-reloc.c	2014-03-05 14:50:47.209414835 +0100
 @@ -112,11 +112,13 @@ EBLHOOK(reloc_valid_use) (Elf *elf, int
  }
  
@@ -71,10 +36,76 @@ Index: elfutils-0.155/backends/common-reloc.c
    ebl->none_reloc_p = EBLHOOK(none_reloc_p);
  #ifndef NO_RELATIVE_RELOC
    ebl->relative_reloc_p = EBLHOOK(relative_reloc_p);
-Index: elfutils-0.155/backends/mips_init.c
-===================================================================
---- /dev/null
-+++ elfutils-0.155/backends/mips_init.c
+--- elfutils-0.158/backends/mips_attrs.c.0010~	2014-03-05 14:50:47.219414836 +0100
++++ elfutils-0.158/backends/mips_attrs.c	2014-03-05 14:50:47.219414836 +0100
+@@ -0,0 +1,65 @@
++/* Object attribute tags for PowerPC.
++   Copyright (C) 2008, 2009 Red Hat, Inc.
++   This file is part of Red Hat elfutils.
++
++   Red Hat elfutils is free software; you can redistribute it and/or modify
++   it under the terms of the GNU General Public License as published by the
++   Free Software Foundation; version 2 of the License.
++
++   Red Hat elfutils is distributed in the hope that it will be useful, but
++   WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   General Public License for more details.
++
++   You should have received a copy of the GNU General Public License along
++   with Red Hat elfutils; if not, write to the Free Software Foundation,
++   Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301 USA.
++
++   Red Hat elfutils is an included package of the Open Invention Network.
++   An included package of the Open Invention Network is a package for which
++   Open Invention Network licensees cross-license their patents.  No patent
++   license is granted, either expressly or impliedly, by designation as an
++   included package.  Should you wish to participate in the Open Invention
++   Network licensing program, please visit www.openinventionnetwork.com
++   <http://www.openinventionnetwork.com>.  */
++
++#ifdef HAVE_CONFIG_H
++# include <config.h>
++#endif
++
++#include <string.h>
++#include <dwarf.h>
++
++#define BACKEND mips_
++#include "libebl_CPU.h"
++
++bool
++mips_check_object_attribute (ebl, vendor, tag, value, tag_name, value_name)
++     Ebl *ebl __attribute__ ((unused));
++     const char *vendor;
++     int tag;
++     uint64_t value;
++     const char **tag_name;
++     const char **value_name;
++{
++  if (!strcmp (vendor, "gnu"))
++    switch (tag)
++      {
++      case 4:
++	*tag_name = "GNU_MIPS_ABI_FP";
++	static const char *fp_kinds[] =
++	  {
++	    "Hard or soft float",
++	    "Hard float (-mdouble-float)",
++	    "Hard float (-msingle-float)",
++	    "Soft float",
++	    "64-bit float (-mips32r2 -mfp64)",
++	  };
++	if (value < sizeof fp_kinds / sizeof fp_kinds[0])
++	  *value_name = fp_kinds[value];
++	return true;
++      }
++
++  return false;
++}
++
+--- elfutils-0.158/backends/mips_init.c.0010~	2014-03-05 14:50:47.209414835 +0100
++++ elfutils-0.158/backends/mips_init.c	2014-03-05 14:50:47.209414835 +0100
 @@ -0,0 +1,66 @@
 +/* Initialization of mips specific backend library.
 +   Copyright (C) 2006 Red Hat, Inc.
@@ -142,10 +173,8 @@ Index: elfutils-0.155/backends/mips_init.c
 +  HOOK (eh, check_object_attribute);
 +  return MODVERSION;
 +}
-Index: elfutils-0.155/backends/mips_regs.c
-===================================================================
---- /dev/null
-+++ elfutils-0.155/backends/mips_regs.c
+--- elfutils-0.158/backends/mips_regs.c.0010~	2014-03-05 14:50:47.209414835 +0100
++++ elfutils-0.158/backends/mips_regs.c	2014-03-05 14:50:47.209414835 +0100
 @@ -0,0 +1,104 @@
 +/* Register names and numbers for MIPS DWARF.
 +   Copyright (C) 2006 Red Hat, Inc.
@@ -251,10 +280,8 @@ Index: elfutils-0.155/backends/mips_regs.c
 +  name[namelen++] = '\0';
 +  return namelen;
 +}
-Index: elfutils-0.155/backends/mips_reloc.def
-===================================================================
---- /dev/null
-+++ elfutils-0.155/backends/mips_reloc.def
+--- elfutils-0.158/backends/mips_reloc.def.0010~	2014-03-05 14:50:47.209414835 +0100
++++ elfutils-0.158/backends/mips_reloc.def	2014-03-05 14:50:47.209414835 +0100
 @@ -0,0 +1,79 @@
 +/* List the relocation types for mips.  -*- C -*-
 +   Copyright (C) 2006 Red Hat, Inc.
@@ -335,10 +362,8 @@ Index: elfutils-0.155/backends/mips_reloc.def
 +
 +#define NO_COPY_RELOC 1
 +#define NO_RELATIVE_RELOC 1
-Index: elfutils-0.155/backends/mips_retval.c
-===================================================================
---- /dev/null
-+++ elfutils-0.155/backends/mips_retval.c
+--- elfutils-0.158/backends/mips_retval.c.0010~	2014-03-05 14:50:47.209414835 +0100
++++ elfutils-0.158/backends/mips_retval.c	2014-03-05 14:50:47.209414835 +0100
 @@ -0,0 +1,306 @@
 +/* Function return value location for Linux/mips ABI.
 +   Copyright (C) 2005 Red Hat, Inc.
@@ -646,10 +671,8 @@ Index: elfutils-0.155/backends/mips_retval.c
 +     DWARF and might be valid.  */
 +  return -2;
 +}
-Index: elfutils-0.155/backends/mips_symbol.c
-===================================================================
---- /dev/null
-+++ elfutils-0.155/backends/mips_symbol.c
+--- elfutils-0.158/backends/mips_symbol.c.0010~	2014-03-05 14:50:47.209414835 +0100
++++ elfutils-0.158/backends/mips_symbol.c	2014-03-05 14:50:47.209414835 +0100
 @@ -0,0 +1,308 @@
 +/* MIPS specific symbolic name handling.
 +   Copyright (C) 2002, 2003, 2005 Red Hat, Inc.
@@ -959,10 +982,8 @@ Index: elfutils-0.155/backends/mips_symbol.c
 +{
 +	  return (tag >= DT_LOPROC && tag <= DT_LOPROC + DT_MIPS_NUM);
 +}
-Index: elfutils-0.155/libebl/eblmachineflagname.c
-===================================================================
---- elfutils-0.155.orig/libebl/eblmachineflagname.c
-+++ elfutils-0.155/libebl/eblmachineflagname.c
+--- elfutils-0.158/libebl/eblmachineflagname.c.0010~	2012-12-14 23:40:48.000000000 +0100
++++ elfutils-0.158/libebl/eblmachineflagname.c	2014-03-05 14:50:47.209414835 +0100
 @@ -71,7 +71,7 @@ ebl_machine_flag_name (ebl, flags, buf,
  	      break;
  	    }
@@ -980,10 +1001,8 @@ Index: elfutils-0.155/libebl/eblmachineflagname.c
  
        res = buf;
      }
-Index: elfutils-0.155/libebl/eblopenbackend.c
-===================================================================
---- elfutils-0.155.orig/libebl/eblopenbackend.c
-+++ elfutils-0.155/libebl/eblopenbackend.c
+--- elfutils-0.158/libebl/eblopenbackend.c.0010~	2014-01-03 22:49:44.000000000 +0100
++++ elfutils-0.158/libebl/eblopenbackend.c	2014-03-05 14:50:47.209414835 +0100
 @@ -71,6 +71,8 @@ static const struct
    { "sparc", "elf_sparc", "sparc", 5, EM_SPARC, 0, 0 },
    { "sparc", "elf_sparcv8plus", "sparc", 5, EM_SPARC32PLUS, 0, 0 },
@@ -993,10 +1012,8 @@ Index: elfutils-0.155/libebl/eblopenbackend.c
  
    { "m32", "elf_m32", "m32", 3, EM_M32, 0, 0 },
    { "m68k", "elf_m68k", "m68k", 4, EM_68K, 0, 0 },
-Index: elfutils-0.155/libebl/eblsectionstripp.c
-===================================================================
---- elfutils-0.155.orig/libebl/eblsectionstripp.c
-+++ elfutils-0.155/libebl/eblsectionstripp.c
+--- elfutils-0.158/libebl/eblsectionstripp.c.0010~	2014-01-03 22:48:31.000000000 +0100
++++ elfutils-0.158/libebl/eblsectionstripp.c	2014-03-05 14:50:47.209414835 +0100
 @@ -39,6 +39,13 @@ ebl_section_strip_p (Ebl *ebl, const GEl
  		     const char *name, bool remove_comment,
  		     bool only_remove_debug)
@@ -1011,22 +1028,21 @@ Index: elfutils-0.155/libebl/eblsectionstripp.c
    /* If only debug information should be removed check the name.  There
       is unfortunately no other way.  */
    if (unlikely (only_remove_debug))
-Index: elfutils-0.155/libelf/elf.h
-===================================================================
---- elfutils-0.155.orig/libelf/elf.h
-+++ elfutils-0.155/libelf/elf.h
-@@ -1345,14 +1345,40 @@ typedef struct
+--- elfutils-0.158/libelf/elf.h.0010~	2014-03-05 14:50:47.219414836 +0100
++++ elfutils-0.158/libelf/elf.h	2014-03-05 14:52:27.299415909 +0100
+@@ -1376,15 +1376,41 @@ typedef struct
  
  /* Legal values for e_flags field of Elf32_Ehdr.  */
  
--#define EF_MIPS_NOREORDER   1		/* A .noreorder directive was used */
--#define EF_MIPS_PIC	    2		/* Contains PIC code */
--#define EF_MIPS_CPIC	    4		/* Uses PIC calling sequence */
--#define EF_MIPS_XGOT	    8
--#define EF_MIPS_64BIT_WHIRL 16
--#define EF_MIPS_ABI2	    32
--#define EF_MIPS_ABI_ON32    64
--#define EF_MIPS_ARCH	    0xf0000000	/* MIPS architecture level */
+-#define EF_MIPS_NOREORDER	1     /* A .noreorder directive was used.  */
+-#define EF_MIPS_PIC		2     /* Contains PIC code.  */
+-#define EF_MIPS_CPIC		4     /* Uses PIC calling sequence.  */
+-#define EF_MIPS_XGOT		8
+-#define EF_MIPS_64BIT_WHIRL	16
+-#define EF_MIPS_ABI2		32
+-#define EF_MIPS_ABI_ON32	64
+-#define EF_MIPS_NAN2008	1024  /* Uses IEEE 754-2008 NaN encoding.  */
+-#define EF_MIPS_ARCH		0xf0000000 /* MIPS architecture level.  */
 +#define EF_MIPS_NOREORDER   	1		/* A .noreorder directive was used */
 +#define EF_MIPS_PIC	    	2		/* Contains PIC code */
 +#define EF_MIPS_CPIC	    	4		/* Uses PIC calling sequence */
@@ -1035,6 +1051,7 @@ Index: elfutils-0.155/libelf/elf.h
 +#define EF_MIPS_ABI2	    	32
 +#define EF_MIPS_ABI_ON32    	64
 +#define EF_MIPS_OPTIONS_FIRST	128
++#define EF_MIPS_NAN2008		1024  /* Uses IEEE 754-2008 NaN encoding.  */
 +#define EF_MIPS_ABI	    	0x0000f000  /* ABI of the file */
 +#define EF_MIPS_ARCH_ASE    	0x0f000000  /* MIPS architecture extension */
 +#define EF_MIPS_ARCH	    	0xf0000000	/* MIPS architecture level */
@@ -1064,11 +1081,9 @@ Index: elfutils-0.155/libelf/elf.h
  
  /* Legal values for MIPS architecture level.  */
  
-Index: elfutils-0.155/src/elflint.c
-===================================================================
---- elfutils-0.155.orig/src/elflint.c
-+++ elfutils-0.155/src/elflint.c
-@@ -870,9 +870,17 @@ section [%2d] '%s': symbol %zu does not
+--- elfutils-0.158/src/elflint.c.0010~	2014-03-05 14:50:47.189414835 +0100
++++ elfutils-0.158/src/elflint.c	2014-03-05 14:50:47.219414836 +0100
+@@ -878,9 +878,17 @@ section [%2d] '%s': symbol %zu does not
  	    }
  	}
  
@@ -1087,7 +1102,7 @@ Index: elfutils-0.155/src/elflint.c
  	    ERROR (gettext ("\
  section [%2d] '%s': symbol %zu: local symbol outside range described in sh_info\n"),
  		   idx, section_name (ebl, idx), cnt);
-@@ -887,9 +895,21 @@ section [%2d] '%s': symbol %zu: non-loca
+@@ -895,9 +903,21 @@ section [%2d] '%s': symbol %zu: non-loca
  
        if (GELF_ST_TYPE (sym->st_info) == STT_SECTION
  	  && GELF_ST_BIND (sym->st_info) != STB_LOCAL)
@@ -1109,7 +1124,7 @@ Index: elfutils-0.155/src/elflint.c
  
        if (name != NULL)
  	{
-@@ -1325,7 +1345,8 @@ check_one_reloc (Ebl *ebl, GElf_Ehdr *eh
+@@ -1333,7 +1353,8 @@ check_one_reloc (Ebl *ebl, GElf_Ehdr *eh
    if (!ebl_reloc_type_check (ebl, GELF_R_TYPE (r_info)))
      ERROR (gettext ("section [%2d] '%s': relocation %zu: invalid type\n"),
  	   idx, section_name (ebl, idx), cnt);
@@ -1119,7 +1134,7 @@ Index: elfutils-0.155/src/elflint.c
  	    /* The executable/DSO can contain relocation sections with
  	       all the relocations the linker has applied.  Those sections
  	       are marked non-loaded, though.  */
-@@ -1707,6 +1728,29 @@ section [%2d] '%s': entry %zu: pointer d
+@@ -1715,6 +1736,29 @@ section [%2d] '%s': entry %zu: pointer d
  	    break;
  	  /* FALLTHROUGH */
  
@@ -1149,7 +1164,7 @@ Index: elfutils-0.155/src/elflint.c
  	case DT_AUXILIARY:
  	case DT_FILTER:
  	case DT_FINI:
-@@ -1716,7 +1760,6 @@ section [%2d] '%s': entry %zu: pointer d
+@@ -1724,7 +1768,6 @@ section [%2d] '%s': entry %zu: pointer d
  	case DT_INIT_ARRAY:
  	case DT_JMPREL:
  	case DT_PLTGOT:
@@ -1157,7 +1172,7 @@ Index: elfutils-0.155/src/elflint.c
  	case DT_RELA:
  	case DT_SYMBOLIC:
  	case DT_SYMTAB:
-@@ -2783,7 +2826,9 @@ section [%2d] '%s': symbol %d: cannot re
+@@ -2791,7 +2834,9 @@ section [%2d] '%s': symbol %d: cannot re
  	{
  	  /* Global symbol.  Make sure it is not defined as local.  */
  	  if (GELF_ST_BIND (sym->st_info) == STB_LOCAL)
@@ -1168,7 +1183,7 @@ Index: elfutils-0.155/src/elflint.c
  section [%2d] '%s': symbol %d: local symbol with global scope\n"),
  		   idx, section_name (ebl, idx), cnt);
  	}
-@@ -3521,6 +3566,10 @@ cannot get section header for section [%
+@@ -3529,6 +3574,10 @@ cannot get section header for section [%
  		    && ebl_bss_plt_p (ebl, ehdr))
  		  good_type = SHT_NOBITS;
  
@@ -1179,7 +1194,7 @@ Index: elfutils-0.155/src/elflint.c
  		/* In a debuginfo file, any normal section can be SHT_NOBITS.
  		   This is only invalid for DWARF sections and .shstrtab.  */
  		if (shdr->sh_type != good_type
-@@ -3532,7 +3581,7 @@ cannot get section header for section [%
+@@ -3540,7 +3589,7 @@ cannot get section header for section [%
  		  ERROR (gettext ("\
  section [%2d] '%s' has wrong type: expected %s, is %s\n"),
  			 (int) cnt, scnname,
@@ -1188,7 +1203,7 @@ Index: elfutils-0.155/src/elflint.c
  						stbuf1, sizeof (stbuf1)),
  			 ebl_section_type_name (ebl, shdr->sh_type,
  						stbuf2, sizeof (stbuf2)));
-@@ -3663,7 +3712,10 @@ section [%2zu] '%s': size not multiple o
+@@ -3671,7 +3720,10 @@ section [%2zu] '%s': size not multiple o
  
  #define ALL_SH_FLAGS (SHF_WRITE | SHF_ALLOC | SHF_EXECINSTR | SHF_MERGE \
  		      | SHF_STRINGS | SHF_INFO_LINK | SHF_LINK_ORDER \
@@ -1200,11 +1215,9 @@ Index: elfutils-0.155/src/elflint.c
        if (shdr->sh_flags & ~(GElf_Xword) ALL_SH_FLAGS)
  	{
  	  GElf_Xword sh_flags = shdr->sh_flags & ~(GElf_Xword) ALL_SH_FLAGS;
-Index: elfutils-0.155/src/readelf.c
-===================================================================
---- elfutils-0.155.orig/src/readelf.c
-+++ elfutils-0.155/src/readelf.c
-@@ -7323,7 +7323,8 @@ print_debug (Dwfl_Module *dwflmod, Ebl *
+--- elfutils-0.158/src/readelf.c.0010~	2014-03-05 14:50:47.189414835 +0100
++++ elfutils-0.158/src/readelf.c	2014-03-05 14:50:47.219414836 +0100
+@@ -7858,7 +7858,8 @@ print_debug (Dwfl_Module *dwflmod, Ebl *
        GElf_Shdr shdr_mem;
        GElf_Shdr *shdr = gelf_getshdr (scn, &shdr_mem);
  
@@ -1214,73 +1227,3 @@ Index: elfutils-0.155/src/readelf.c
  	{
  	  static const struct
  	  {
-Index: elfutils-0.155/backends/mips_attrs.c
-===================================================================
---- /dev/null
-+++ elfutils-0.155/backends/mips_attrs.c
-@@ -0,0 +1,65 @@
-+/* Object attribute tags for PowerPC.
-+   Copyright (C) 2008, 2009 Red Hat, Inc.
-+   This file is part of Red Hat elfutils.
-+
-+   Red Hat elfutils is free software; you can redistribute it and/or modify
-+   it under the terms of the GNU General Public License as published by the
-+   Free Software Foundation; version 2 of the License.
-+
-+   Red Hat elfutils is distributed in the hope that it will be useful, but
-+   WITHOUT ANY WARRANTY; without even the implied warranty of
-+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+   General Public License for more details.
-+
-+   You should have received a copy of the GNU General Public License along
-+   with Red Hat elfutils; if not, write to the Free Software Foundation,
-+   Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301 USA.
-+
-+   Red Hat elfutils is an included package of the Open Invention Network.
-+   An included package of the Open Invention Network is a package for which
-+   Open Invention Network licensees cross-license their patents.  No patent
-+   license is granted, either expressly or impliedly, by designation as an
-+   included package.  Should you wish to participate in the Open Invention
-+   Network licensing program, please visit www.openinventionnetwork.com
-+   <http://www.openinventionnetwork.com>.  */
-+
-+#ifdef HAVE_CONFIG_H
-+# include <config.h>
-+#endif
-+
-+#include <string.h>
-+#include <dwarf.h>
-+
-+#define BACKEND mips_
-+#include "libebl_CPU.h"
-+
-+bool
-+mips_check_object_attribute (ebl, vendor, tag, value, tag_name, value_name)
-+     Ebl *ebl __attribute__ ((unused));
-+     const char *vendor;
-+     int tag;
-+     uint64_t value;
-+     const char **tag_name;
-+     const char **value_name;
-+{
-+  if (!strcmp (vendor, "gnu"))
-+    switch (tag)
-+      {
-+      case 4:
-+	*tag_name = "GNU_MIPS_ABI_FP";
-+	static const char *fp_kinds[] =
-+	  {
-+	    "Hard or soft float",
-+	    "Hard float (-mdouble-float)",
-+	    "Hard float (-msingle-float)",
-+	    "Soft float",
-+	    "64-bit float (-mips32r2 -mfp64)",
-+	  };
-+	if (value < sizeof fp_kinds / sizeof fp_kinds[0])
-+	  *value_name = fp_kinds[value];
-+	return true;
-+      }
-+
-+  return false;
-+}
-+
