@@ -115,9 +115,9 @@ handling compiled objects.
 %prep
 %setup -q
 %apply_patches
+autoreconf -fi
 
 %build
-autoreconf -fi
 mkdir build-%{_target_platform}
 pushd build-%{_target_platform}
 
