@@ -14,7 +14,7 @@
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
 Version:	0.158
-Release:	1
+Release:	2
 License:	GPLv2+
 Group:		Development/Other
 Url:		http://fedorahosted.org/elfutils/
@@ -29,15 +29,16 @@ Patch6:         elfutils-uninitialized.diff
 Patch7:         elfutils-0.137-dwarf-header-check-fix.diff
 Patch8:         elfutils-0.148-dont-crash.diff
 Patch9:         elfutils-revert-portability-scanf.patch
+Patch10:	elfutils-0.158-mod-e_type.patch
 
 # mdv patches
-Patch10:	elfutils-0.158-mips_backend.patch
-Patch11:	elfutils-0.139-sparc-align.patch
-Patch12:	elfutils-0.139-fix-special-sparc-elf32-plt-entries.patch
-Patch13:	elfutils-0.152-strip-.GCC.command.line-section.patch
-Patch14:	elfutils-0.153-add-missing-lpthread-linkage.patch
-Patch15:	elfutils_signed_comparison.patch
-Patch17:	elfutils-0.158-dont-fail-on-strip-reloc-check-against-self.patch
+Patch100:	elfutils-0.158-mips_backend.patch
+Patch101:	elfutils-0.139-sparc-align.patch
+Patch102:	elfutils-0.139-fix-special-sparc-elf32-plt-entries.patch
+Patch103:	elfutils-0.152-strip-.GCC.command.line-section.patch
+Patch104:	elfutils-0.153-add-missing-lpthread-linkage.patch
+Patch105:	elfutils_signed_comparison.patch
+Patch107:	elfutils-0.158-dont-fail-on-strip-reloc-check-against-self.patch
 
 BuildRequires:	bison
 BuildRequires:	flex
