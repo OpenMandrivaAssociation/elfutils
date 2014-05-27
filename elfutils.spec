@@ -13,30 +13,24 @@
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
-Version:	0.158
-Release:	2
+Version:	0.159
+Release:	1
 License:	GPLv2+
 Group:		Development/Other
 Url:		http://fedorahosted.org/elfutils/
 Source0:	https://fedorahosted.org/releases/e/l/elfutils/%{version}/%{name}-%{version}.tar.bz2
-# these 2 patches are from ftp://sources.redhat.com/pub/systemtap/elfutils/ 
-# this hasn't been used since 200700 import why keep around
 #Patch0:	https://fedorahosted.org/releases/e/l/elfutils/%{version}/elfutils-portability.patch
-Patch1:		https://fedorahosted.org/releases/e/l/elfutils/%{version}/elfutils-robustify.patch
-#Patch2:		elfutils-0.155-binutils-pr-ld-13621.patch
-#Patch4:         elfutils-no-po-test-build.diff
 Patch6:         elfutils-uninitialized.diff
 Patch7:         elfutils-0.137-dwarf-header-check-fix.diff
 Patch8:         elfutils-0.148-dont-crash.diff
 Patch9:         elfutils-revert-portability-scanf.patch
-Patch10:	elfutils-0.158-mod-e_type.patch
 
 # mdv patches
 Patch100:	elfutils-0.158-mips_backend.patch
 Patch101:	elfutils-0.139-sparc-align.patch
 Patch102:	elfutils-0.139-fix-special-sparc-elf32-plt-entries.patch
 Patch103:	elfutils-0.152-strip-.GCC.command.line-section.patch
-Patch104:	elfutils-0.153-add-missing-lpthread-linkage.patch
+Patch104:	elfutils-0.159-add-missing-lpthread-linkage.patch
 Patch105:	elfutils_signed_comparison.patch
 Patch107:	elfutils-0.158-dont-fail-on-strip-reloc-check-against-self.patch
 
@@ -49,11 +43,11 @@ BuildRequires:	pkgconfig(zlib)
 Obsoletes:	%{libname} < 0.155
 
 %description
-Elfutils is a collection of utilities, including ld (a linker),
-nm (for listing symbols from object files), size (for listing the
-section sizes of an object or archive file), strip (for discarding
-symbols), readelf (to see the raw ELF file structures), and elflint
-(to check for well-formed ELF files).
+Elfutils is a collection of utilities, including stack (to show
+backtraces), nm (for listing symbols from object files), size
+(for listing the section sizes of an object or archive file),
+strip (for discarding symbols), readelf (to see the raw ELF file
+structures), and elflint (to check for well-formed ELF files).
 
 %package -n	%{libasm}
 Summary:	Libraries to read and write ELF files
@@ -131,8 +125,7 @@ CONFIGURE_TOP=.. \
 	--enable-thread-safety \
 	--with-zlib \
 	--with-bzlib \
-	--with-lzma \
-	--enable-dwz
+	--with-lzma
 
 %make
 popd

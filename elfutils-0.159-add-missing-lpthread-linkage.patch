@@ -1,0 +1,20 @@
+--- elfutils-0.159/src/Makefile.am.0104~	2014-05-27 15:43:16.935275401 +0200
++++ elfutils-0.159/src/Makefile.am	2014-05-27 15:43:35.012096336 +0200
+@@ -89,7 +89,7 @@ endif
+ # XXX While the file is not finished, don't warn about this
+ ldgeneric_no_Wunused = yes
+ 
+-readelf_LDADD = $(libdw) $(libebl) $(libelf) $(libeu) -ldl
++readelf_LDADD = $(libdw) $(libebl) $(libelf) $(libeu) -ldl -lpthread
+ nm_LDADD = $(libdw) $(libebl) $(libelf) $(libeu) -ldl \
+ 	   $(demanglelib)
+ size_LDADD = $(libelf) $(libeu)
+@@ -100,7 +100,7 @@ if NATIVE_LD
+ ld_LDADD += libld_elf.a
+ endif
+ ld_LDFLAGS = -rdynamic
+-elflint_LDADD  = $(libebl) $(libelf) $(libeu) -ldl
++elflint_LDADD  = $(libebl) $(libelf) $(libeu) -ldl -lpthread
+ findtextrel_LDADD = $(libdw) $(libelf)
+ addr2line_LDADD = $(libdw) $(libelf)
+ elfcmp_LDADD = $(libebl) $(libelf) -ldl
