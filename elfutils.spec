@@ -14,16 +14,17 @@
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
 Version:	0.159
-Release:	2
+Release:	3
 License:	GPLv2+
 Group:		Development/Other
 Url:		http://fedorahosted.org/elfutils/
 Source0:	https://fedorahosted.org/releases/e/l/elfutils/%{version}/%{name}-%{version}.tar.bz2
 #Patch0:	https://fedorahosted.org/releases/e/l/elfutils/%{version}/elfutils-portability.patch
-Patch6:         elfutils-uninitialized.diff
-Patch7:         elfutils-0.137-dwarf-header-check-fix.diff
-Patch8:         elfutils-0.148-dont-crash.diff
-Patch9:         elfutils-revert-portability-scanf.patch
+Patch6:		elfutils-uninitialized.diff
+Patch7:		elfutils-0.137-dwarf-header-check-fix.diff
+Patch8:		elfutils-0.148-dont-crash.diff
+Patch9:		elfutils-revert-portability-scanf.patch
+Patch10:	elfutils-aarch64-user_regs_struct.patch
 
 # mdv patches
 Patch100:	elfutils-0.158-mips_backend.patch
