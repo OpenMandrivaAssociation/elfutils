@@ -1,4 +1,4 @@
-%define	major 1
+%define	major	1
 
 #the old name was _libelfutils1
 %define	libname	%mklibname %{name} %{major}
@@ -14,7 +14,7 @@
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
 Version:	0.159
-Release:	3
+Release:	4
 License:	GPLv2+
 Group:		Development/Other
 Url:		http://fedorahosted.org/elfutils/
@@ -24,7 +24,13 @@ Patch6:		elfutils-uninitialized.diff
 Patch7:		elfutils-0.137-dwarf-header-check-fix.diff
 Patch8:		elfutils-0.148-dont-crash.diff
 Patch9:		elfutils-revert-portability-scanf.patch
-Patch10:	elfutils-aarch64-user_regs_struct.patch
+
+# fedora
+Patch11:	elfutils-aarch64-user_regs_struct.patch
+Patch12:	elfutils-0.159-argp-attach.patch
+Patch13:	elfutils-0.159-aarch64-bool-ret.patch
+Patch14:	elfutils-0.159-elf-h.patch
+Patch15:	elfutils-0.159-ppc64le-elfv2-abi.patch
 
 # mdv patches
 Patch100:	elfutils-0.158-mips_backend.patch
