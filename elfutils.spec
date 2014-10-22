@@ -26,7 +26,6 @@ Patch8:		elfutils-0.148-dont-crash.diff
 Patch9:		elfutils-revert-portability-scanf.patch
 
 # fedora
-Patch15:	elfutils-0.159-ppc64le-elfv2-abi.patch
 
 # mdv patches
 Patch100:	elfutils-0.158-mips_backend.patch
