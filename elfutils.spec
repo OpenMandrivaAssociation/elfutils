@@ -26,7 +26,6 @@ Patch8:		elfutils-0.148-dont-crash.diff
 Patch9:		elfutils-revert-portability-scanf.patch
 
 # fedora
-Patch11:	elfutils-aarch64-user_regs_struct.patch
 Patch12:	elfutils-0.159-argp-attach.patch
 Patch13:	elfutils-0.159-aarch64-bool-ret.patch
 Patch14:	elfutils-0.159-elf-h.patch
