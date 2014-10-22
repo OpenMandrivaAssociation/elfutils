@@ -13,8 +13,8 @@
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
-Version:	0.159
-Release:	5
+Version:	0.160
+Release:	1
 License:	GPLv2+
 Group:		Development/Other
 Url:		http://fedorahosted.org/elfutils/
@@ -130,9 +130,10 @@ pushd build-%{_target_platform}
 # [pixel] libld_elf_i386.so is quite weird, could be dropped? workarounding for now...
 %define _disable_ld_no_undefined 1
 
-CFLAGS="%{optflags} -Wno-error" \
+%global optflags %{optflags} -Wno-error -g0
+
 CONFIGURE_TOP=.. \
-%configure2_5x \
+%configure \
 	%{?_program_prefix: --program-prefix=%{_program_prefix}} \
 	--enable-thread-safety \
 	--with-zlib \
