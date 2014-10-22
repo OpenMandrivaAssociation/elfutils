@@ -125,7 +125,7 @@ pushd build-%{_target_platform}
 # [pixel] libld_elf_i386.so is quite weird, could be dropped? workarounding for now...
 %define _disable_ld_no_undefined 1
 
-%global optflags %{optflags} -Wno-error -g0
+%global optflags %{optflags} -Wno-error
 
 CONFIGURE_TOP=.. \
 %configure \
