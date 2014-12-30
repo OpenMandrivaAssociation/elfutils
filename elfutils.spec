@@ -21,14 +21,13 @@ Url:		http://fedorahosted.org/elfutils/
 Source0:	https://fedorahosted.org/releases/e/l/elfutils/%{version}/%{name}-%{version}.tar.bz2
 #Patch0:	https://fedorahosted.org/releases/e/l/elfutils/%{version}/elfutils-portability.patch
 Patch6:		elfutils-uninitialized.diff
-Patch7:		elfutils-0.137-dwarf-header-check-fix.diff
 Patch8:		elfutils-0.148-dont-crash.diff
 Patch9:		elfutils-revert-portability-scanf.patch
 
 # fedora
 
 # mdv patches
-Patch100:	elfutils-0.158-mips_backend.patch
+#Patch100:	elfutils-0.158-mips_backend.patch
 Patch101:	elfutils-0.139-sparc-align.patch
 Patch102:	elfutils-0.139-fix-special-sparc-elf32-plt-entries.patch
 Patch103:	elfutils-0.152-strip-.GCC.command.line-section.patch
