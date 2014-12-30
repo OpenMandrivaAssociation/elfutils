@@ -1,2 +1,4 @@
-sources:
+removed_sources:
   elfutils-0.160.tar.bz2: a300a1cd1543b65532e333a6e9f931db76841558
+sources:
+  elfutils-0.161.tar.bz2: 85d48e18359c51e843c49b1894b2f54b85e88ae2
