@@ -1028,37 +1028,22 @@
    /* If only debug information should be removed check the name.  There
       is unfortunately no other way.  */
    if (unlikely (only_remove_debug))
---- elfutils-0.158/libelf/elf.h.0010~	2014-03-05 14:50:47.219414836 +0100
-+++ elfutils-0.158/libelf/elf.h	2014-03-05 14:52:27.299415909 +0100
-@@ -1376,15 +1376,41 @@ typedef struct
- 
- /* Legal values for e_flags field of Elf32_Ehdr.  */
- 
--#define EF_MIPS_NOREORDER	1     /* A .noreorder directive was used.  */
--#define EF_MIPS_PIC		2     /* Contains PIC code.  */
--#define EF_MIPS_CPIC		4     /* Uses PIC calling sequence.  */
--#define EF_MIPS_XGOT		8
--#define EF_MIPS_64BIT_WHIRL	16
--#define EF_MIPS_ABI2		32
--#define EF_MIPS_ABI_ON32	64
--#define EF_MIPS_NAN2008	1024  /* Uses IEEE 754-2008 NaN encoding.  */
--#define EF_MIPS_ARCH		0xf0000000 /* MIPS architecture level.  */
-+#define EF_MIPS_NOREORDER   	1		/* A .noreorder directive was used */
-+#define EF_MIPS_PIC	    	2		/* Contains PIC code */
-+#define EF_MIPS_CPIC	    	4		/* Uses PIC calling sequence */
-+#define EF_MIPS_XGOT	    	8
-+#define EF_MIPS_64BIT_WHIRL 	16
-+#define EF_MIPS_ABI2	    	32
-+#define EF_MIPS_ABI_ON32    	64
+--- elfutils-0.162.orig/libelf/elf.h
++++ elfutils-0.162/libelf/elf.h
+@@ -1384,10 +1384,36 @@
+ #define EF_MIPS_64BIT_WHIRL	16
+ #define EF_MIPS_ABI2		32
+ #define EF_MIPS_ABI_ON32	64
 +#define EF_MIPS_OPTIONS_FIRST	128
-+#define EF_MIPS_NAN2008		1024  /* Uses IEEE 754-2008 NaN encoding.  */
-+#define EF_MIPS_ABI	    	0x0000f000  /* ABI of the file */
-+#define EF_MIPS_ARCH_ASE    	0x0f000000  /* MIPS architecture extension */
-+#define EF_MIPS_ARCH	    	0xf0000000	/* MIPS architecture level */
-+
+ #define EF_MIPS_FP64		512  /* Uses FP64 (12 callee-saved).  */
+ #define EF_MIPS_NAN2008	1024  /* Uses IEEE 754-2008 NaN encoding.  */
++#define EF_MIPS_ABI		0x0000f000  /* ABI of the file */
++#define EF_MIPS_ARCH_ASE		0x0f000000  /* MIPS architecture extension */
+ #define EF_MIPS_ARCH		0xf0000000 /* MIPS architecture level.  */
+ 
 +/* Indicates code compiled for a 64-bit machine in 32-bit mode.
 + *    (regs are 32-bits wide.) */
-+#define EF_MIPS_32BITMODE	0x00000100
++#define EF_MIPS_32BITMODE      0x00000100
 +
 +/* The original o32 abi. */
 +#define E_MIPS_ABI_O32          0x00001000
@@ -1074,13 +1059,14 @@
 +
 +/* Legal values for MIPS ASE */
 +/* Use MDMX multimedia extensions */
-+#define EF_MIPS_ARCH_ASE_MDMX	0x08000000
++#define EF_MIPS_ARCH_ASE_MDMX  0x08000000
 +
 +/* Use MIPS-16 ISA extensions */
-+#define EF_MIPS_ARCH_ASE_M16	0x04000000
- 
++#define EF_MIPS_ARCH_ASE_M16   0x04000000
++
  /* Legal values for MIPS architecture level.  */
  
+ #define EF_MIPS_ARCH_1		0x00000000 /* -mips1 code.  */
 --- elfutils-0.158/src/elflint.c.0010~	2014-03-05 14:50:47.189414835 +0100
 +++ elfutils-0.158/src/elflint.c	2014-03-05 14:50:47.219414836 +0100
 @@ -878,9 +878,17 @@ section [%2d] '%s': symbol %zu does not
@@ -1184,7 +1170,7 @@
  		   idx, section_name (ebl, idx), cnt);
  	}
 @@ -3529,6 +3574,10 @@ cannot get section header for section [%
- 		    && ebl_bss_plt_p (ebl, ehdr))
+ 		    && ebl_bss_plt_p (ebl))
  		  good_type = SHT_NOBITS;
  
 +		if ((ehdr->e_machine == EM_MIPS) || (ehdr->e_machine == EM_MIPS_RS3_LE)) {

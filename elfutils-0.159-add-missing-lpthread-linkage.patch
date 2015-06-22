@@ -1,20 +1,20 @@
---- elfutils-0.159/src/Makefile.am.0104~	2014-05-27 15:43:16.935275401 +0200
-+++ elfutils-0.159/src/Makefile.am	2014-05-27 15:43:35.012096336 +0200
-@@ -89,7 +89,7 @@ endif
- # XXX While the file is not finished, don't warn about this
- ldgeneric_no_Wunused = yes
+--- elfutils-0.162/src/Makefile.am	2015-06-16 16:47:54.358667529 +0300
++++ elfutils-0.162/src/Makefile.am	2015-06-16 16:50:59.843670915 +0300
+@@ -103,7 +103,7 @@
+ ar_no_Wstack_usage = yes
+ unstrip_no_Wstack_usage = yes
  
--readelf_LDADD = $(libdw) $(libebl) $(libelf) $(libeu) -ldl
-+readelf_LDADD = $(libdw) $(libebl) $(libelf) $(libeu) -ldl -lpthread
- nm_LDADD = $(libdw) $(libebl) $(libelf) $(libeu) -ldl \
+-readelf_LDADD = $(libdw) $(libebl) $(libelf) $(libeu) $(argp_LDADD) -ldl
++readelf_LDADD = $(libdw) $(libebl) $(libelf) $(libeu) $(argp_LDADD) -ldl -lpthread
+ nm_LDADD = $(libdw) $(libebl) $(libelf) $(libeu) $(argp_LDADD) -ldl \
  	   $(demanglelib)
- size_LDADD = $(libelf) $(libeu)
-@@ -100,7 +100,7 @@ if NATIVE_LD
+ size_LDADD = $(libelf) $(libeu) $(argp_LDADD)
+@@ -114,7 +114,7 @@
  ld_LDADD += libld_elf.a
  endif
  ld_LDFLAGS = -rdynamic
--elflint_LDADD  = $(libebl) $(libelf) $(libeu) -ldl
-+elflint_LDADD  = $(libebl) $(libelf) $(libeu) -ldl -lpthread
- findtextrel_LDADD = $(libdw) $(libelf)
- addr2line_LDADD = $(libdw) $(libelf)
- elfcmp_LDADD = $(libebl) $(libelf) -ldl
+-elflint_LDADD  = $(libebl) $(libelf) $(libeu) $(argp_LDADD) -ldl
++elflint_LDADD  = $(libebl) $(libelf) $(libeu) $(argp_LDADD) -ldl -lpthread
+ findtextrel_LDADD = $(libdw) $(libelf) $(argp_LDADD)
+ addr2line_LDADD = $(libdw) $(libelf) $(argp_LDADD) $(demanglelib)
+ elfcmp_LDADD = $(libebl) $(libelf) $(argp_LDADD) -ldl

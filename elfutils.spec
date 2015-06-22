@@ -21,18 +21,20 @@ Url:		http://fedorahosted.org/elfutils/
 Source0:	https://fedorahosted.org/releases/e/l/elfutils/%{version}/%{name}-%{version}.tar.bz2
 #Patch0:	https://fedorahosted.org/releases/e/l/elfutils/%{version}/elfutils-portability.patch
 Patch6:		elfutils-uninitialized.diff
+Patch7:		elfutils-0.137-dwarf-header-check-fix.diff
 Patch8:		elfutils-0.148-dont-crash.diff
 Patch9:		elfutils-revert-portability-scanf.patch
 
 # fedora
 
 # mdv patches
-#Patch100:	elfutils-0.158-mips_backend.patch
+Patch100:	elfutils-0.158-mips_backend.patch
 Patch101:	elfutils-0.139-sparc-align.patch
 Patch102:	elfutils-0.139-fix-special-sparc-elf32-plt-entries.patch
 Patch103:	elfutils-0.152-strip-.GCC.command.line-section.patch
 Patch104:	elfutils-0.159-add-missing-lpthread-linkage.patch
-Patch105:	elfutils_signed_comparison.patch
+# (tpg) disable for now
+#Patch105:	elfutils_signed_comparison.patch
 Patch107:	elfutils-0.158-dont-fail-on-strip-reloc-check-against-self.patch
 
 BuildRequires:	bison
@@ -50,7 +52,7 @@ backtraces), nm (for listing symbols from object files), size
 strip (for discarding symbols), readelf (to see the raw ELF file
 structures), and elflint (to check for well-formed ELF files).
 
-%package -n	%{libasm}
+%package -n %{libasm}
 Summary:	Libraries to read and write ELF files
 Group:		System/Libraries
 Obsoletes:	%{libname} < 0.155
@@ -58,7 +60,7 @@ Obsoletes:	%{libname} < 0.155
 %description -n	%{libasm}
 Included are the helper library which implement machine-specific ELF handling.
 
-%package -n	%{libdw}
+%package -n %{libdw}
 Summary:	Libraries to read and write ELF files
 Group:		System/Libraries
 Obsoletes:	%{libname} < 0.155
@@ -66,7 +68,7 @@ Obsoletes:	%{libname} < 0.155
 %description -n	%{libdw}
 Included are the helper library which implement DWARF ELF handling.
 
-%package -n	%{libelf}
+%package -n %{libelf}
 Summary:	Libraries to read and write ELF files
 Group:		System/Libraries
 Obsoletes:	%{libname} < 0.155
@@ -80,7 +82,7 @@ on a high level.  Third party programs depend on this package to read
 internals of ELF files.  The programs of the elfutils package use it
 also to generate new ELF files.
 
-%package -n	%{devname}
+%package -n %{devname}
 Summary:	Development libraries to handle compiled objects
 Group:		Development/Other
 Requires:	%{libasm} = %{EVRD}
