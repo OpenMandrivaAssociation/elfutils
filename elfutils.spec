@@ -1,19 +1,18 @@
-%define	major	1
+%define	major 1
 
 #the old name was _libelfutils1
-%define	libname	%mklibname %{name} %{major}
-
-%define	libasm	%mklibname asm %{major}
-%define libdw	%mklibname dw %{major}
-%define	libelf	%mklibname elf %{major}
-%define	devname	%mklibname %{name} -d
-%define	static	%mklibname %{name} -d -s
+%define libname %mklibname %{name} %{major}
+%define libasm %mklibname asm %{major}
+%define libdw %mklibname dw %{major}
+%define libelf %mklibname elf %{major}
+%define devname %mklibname %{name} -d
+%define static %mklibname %{name} -d -s
 
 %define _program_prefix eu-
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
-Version:	0.162
+Version:	0.163
 Release:	1
 License:	GPLv2+
 Group:		Development/Other
@@ -115,10 +114,10 @@ handling compiled objects.
 autoreconf -fi
 
 %build
-# (tpg) use gcc, because clang fails to build it
+# (tpg) use gcc, because clang fails to build it because of VLAIS
 # https://wiki.openmandriva.org/en/Packages_forcing_gcc_use
-#export CC=gcc
-#export CXX=g++
+export CC=gcc
+export CXX=g++
 
 mkdir -p build-%{_target_platform}
 pushd build-%{_target_platform}
