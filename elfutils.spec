@@ -12,14 +12,14 @@
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
-Version:	0.163
-Release:	3
+Version:	0.164
+Release:	1
 License:	GPLv2+
 Group:		Development/Other
 Url:		http://fedorahosted.org/elfutils/
 Source0:	https://fedorahosted.org/releases/e/l/elfutils/%{version}/%{name}-%{version}.tar.bz2
-#Patch0:	https://fedorahosted.org/releases/e/l/elfutils/%{version}/elfutils-portability.patch
-Patch6:		elfutils-uninitialized.diff
+# (tpg) not needed anymore ?
+#Patch6:		elfutils-uninitialized.diff
 Patch7:		elfutils-0.137-dwarf-header-check-fix.diff
 Patch8:		elfutils-0.148-dont-crash.diff
 Patch9:		elfutils-revert-portability-scanf.patch
@@ -116,8 +116,8 @@ autoreconf -fi
 %build
 # (tpg) use gcc, because clang fails to build it because of VLAIS
 # https://wiki.openmandriva.org/en/Packages_forcing_gcc_use
-export CC=gcc
-export CXX=g++
+#export CC=gcc
+#export CXX=g++
 
 mkdir -p build-%{_target_platform}
 pushd build-%{_target_platform}
