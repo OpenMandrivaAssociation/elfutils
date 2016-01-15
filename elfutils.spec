@@ -116,8 +116,8 @@ autoreconf -fi
 %build
 # (tpg) use gcc, because clang fails to build it because of VLAIS
 # https://wiki.openmandriva.org/en/Packages_forcing_gcc_use
-#export CC=gcc
-#export CXX=g++
+export CC=gcc
+export CXX=g++
 
 mkdir -p build-%{_target_platform}
 pushd build-%{_target_platform}
