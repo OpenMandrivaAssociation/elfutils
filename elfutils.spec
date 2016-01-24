@@ -127,12 +127,6 @@ pushd build-%{_target_platform}
 
 %global optflags %{optflags} -Wno-error
 
-# (tpg) build with bfd as gold fails
-mkdir bfd
-ln -s %{_bindir}/ld.bfd bfd/ld
-export PATH=$PWD/bfd:$PATH
-%global ldflags %{ldflags} -fuse-ld=bfd
-
 CONFIGURE_TOP=.. \
 %configure \
 	%{?_program_prefix: --program-prefix=%{_program_prefix}} \
