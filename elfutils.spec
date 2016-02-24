@@ -9,6 +9,7 @@
 %define static %mklibname %{name} -d -s
 
 %define _program_prefix eu-
+%define	_disable_lto	1
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
@@ -116,8 +117,8 @@ autoreconf -fi
 %build
 # (tpg) use gcc, because clang fails to build it because of VLAIS
 # https://wiki.openmandriva.org/en/Packages_forcing_gcc_use
-export CC=gcc
-export CXX=g++
+export CC="gcc"
+export CXX="g++"
 
 mkdir -p build-%{_target_platform}
 pushd build-%{_target_platform}
@@ -128,7 +129,7 @@ pushd build-%{_target_platform}
 %global optflags %{optflags} -Wno-error
 
 CONFIGURE_TOP=.. \
-%configure \
+CFLAGS="%{optflags}" CPPFLAGS="%{optflags}" LDFLAGS="%{ldflags}" %configure \
 	%{?_program_prefix: --program-prefix=%{_program_prefix}} \
 	--enable-thread-safety \
 	--with-zlib \
