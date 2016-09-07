@@ -14,11 +14,11 @@ semantic error: libdw failure (dwarf_getsrcfiles): invalid DWARF
  libdw/dwarf_getsrclines.c |    2 ++
  1 file changed, 2 insertions(+)
 
-Index: elfutils-0.155/libdw/dwarf_getsrclines.c
+Index: elfutils-0.166/libdw/dwarf_getsrclines.c
 ===================================================================
---- elfutils-0.162.orig/libdw/dwarf_getsrclines.c
-+++ elfutils-0.162/libdw/dwarf_getsrclines.c
-@@ -317,8 +317,10 @@
+--- elfutils-0.166.orig/libdw/dwarf_getsrclines.c	2016-03-02 17:25:38.000000000 +0100
++++ elfutils-0.166/libdw/dwarf_getsrclines.c	2016-06-27 14:23:58.787633776 +0200
+@@ -404,8 +404,10 @@
    /* Consistency check.  */
    if (unlikely (linep != header_start + header_length))
      {
@@ -28,4 +28,4 @@ Index: elfutils-0.155/libdw/dwarf_getsrclines.c
 +#endif
      }
  
-   /* We are about to process the statement program.  Initialize the
+   state.is_stmt = default_is_stmt;

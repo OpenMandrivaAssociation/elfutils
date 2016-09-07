@@ -19,23 +19,14 @@ License:	GPLv2+
 Group:		Development/Other
 Url:		http://fedorahosted.org/elfutils/
 Source0:	https://fedorahosted.org/releases/e/l/elfutils/%{version}/%{name}-%{version}.tar.bz2
-# (tpg) not needed anymore ?
-#Patch6:		elfutils-uninitialized.diff
-#Patch7:		elfutils-0.137-dwarf-header-check-fix.diff
-Patch8:		elfutils-0.148-dont-crash.diff
-Patch9:		elfutils-revert-portability-scanf.patch
 
 # fedora
+Patch0:		elfutils-0.166-dwarf-header-check-fix.diff
+Patch1:		elfutils-0.148-dont-crash.diff
+Patch2:		elfutils-revert-portability-scanf.patch
 
 # mdv patches
-#Patch100:	elfutils-0.158-mips_backend.patch
-Patch101:	elfutils-0.139-sparc-align.patch
-Patch102:	elfutils-0.139-fix-special-sparc-elf32-plt-entries.patch
 Patch103:	elfutils-0.152-strip-.GCC.command.line-section.patch
-Patch104:	elfutils-0.159-add-missing-lpthread-linkage.patch
-# (tpg) disable for now
-#Patch105:	elfutils_signed_comparison.patch
-Patch107:	elfutils-0.158-dont-fail-on-strip-reloc-check-against-self.patch
 
 BuildRequires:	bison
 BuildRequires:	flex
@@ -131,7 +122,7 @@ pushd build-%{_target_platform}
 CONFIGURE_TOP=.. \
 CFLAGS="%{optflags}" CPPFLAGS="%{optflags}" LDFLAGS="%{ldflags}" %configure \
 	%{?_program_prefix: --program-prefix=%{_program_prefix}} \
-	--enable-thread-safety \
+	--disable-thread-safety \
 	--with-zlib \
 	--with-bzlib \
 	--with-lzma
