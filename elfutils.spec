@@ -17,17 +17,8 @@ Version:	0.167
 Release:	1
 License:	GPLv2+
 Group:		Development/Other
-Url:		http://fedorahosted.org/elfutils/
-Source0:	https://fedorahosted.org/releases/e/l/elfutils/%{version}/%{name}-%{version}.tar.bz2
-
-# fedora
-Patch0:		elfutils-0.166-dwarf-header-check-fix.diff
-Patch1:		elfutils-0.148-dont-crash.diff
-Patch2:		elfutils-revert-portability-scanf.patch
-
-# mdv patches
-Patch103:	elfutils-0.152-strip-.GCC.command.line-section.patch
-
+Url:		https://sourceware.org/elfutils/
+Source0:	ftp://sourceware.org/pub/elfutils/%{version}/%{name}-%{version}.tar.bz2
 BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	bzip2-devel
