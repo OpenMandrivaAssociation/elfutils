@@ -14,7 +14,7 @@
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
 Version:	0.157
-Release:	6
+Release:	7
 License:	GPLv2+
 Group:		Development/Other
 Url:		http://fedorahosted.org/elfutils/
@@ -40,6 +40,8 @@ Patch14:	elfutils-0.153-add-missing-lpthread-linkage.patch
 #Patch15:	elfutils_signed_comparison.patch
 #Patch17:	elfutils-0.153-dont-fail-on-strip-reloc-check-against-self.patch
 #Patch18:	elfutils-aarch64.patch
+# fedora - fix eu-strip removing symbols (breaks rust rpm)
+Patch19:	elfutils-0.157-strip-alloc-symbol.patch
 
 BuildRequires:	bison
 BuildRequires:	flex
