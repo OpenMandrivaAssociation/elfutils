@@ -9,11 +9,11 @@
 %define static %mklibname %{name} -d -s
 
 %define _program_prefix eu-
-%define	_disable_lto	1
+%define	_disable_lto 1
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
-Version:	0.168
+Version:	0.169
 Release:	1
 License:	GPLv2+
 Group:		Development/Other
