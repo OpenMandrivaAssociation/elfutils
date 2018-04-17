@@ -25,7 +25,6 @@ BuildRequires:	bzip2-devel
 BuildRequires:	gettext-devel
 BuildRequires:	pkgconfig(liblzma)
 BuildRequires:	pkgconfig(zlib)
-BuildRequires:	binutils
 Obsoletes:	%{libname} < 0.155
 
 %description
@@ -103,10 +102,6 @@ autoreconf -fi
 export CC="gcc"
 export CXX="g++"
 
-ld --version || :
-ld.gold --version || :
-ld.bfd --version || :
-
 mkdir -p build-%{_target_platform}
 pushd build-%{_target_platform}
 
@@ -121,9 +116,7 @@ CFLAGS="%{optflags}" CPPFLAGS="%{optflags}" LDFLAGS="%{ldflags}" %configure \
 	--disable-thread-safety \
 	--with-zlib \
 	--with-bzlib \
-	--with-lzma || :
-cat config.log
-exit 1
+	--with-lzma
 
 %make
 popd
