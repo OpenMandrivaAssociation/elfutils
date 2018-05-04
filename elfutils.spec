@@ -1,4 +1,4 @@
-%define	major 1
+%define major 1
 
 #the old name was _libelfutils1
 %define libname %mklibname %{name} %{major}
@@ -9,12 +9,14 @@
 %define static %mklibname %{name} -d -s
 
 %define _program_prefix eu-
-%define	_disable_lto 1
+%define _disable_lto 1
+
+%global optflags %{optflags} -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
 Version:	0.170
-Release:	2
+Release:	3
 License:	GPLv2+
 Group:		Development/Other
 Url:		https://sourceware.org/elfutils/
@@ -39,7 +41,7 @@ Summary:	Libraries to read and write ELF files
 Group:		System/Libraries
 Obsoletes:	%{libname} < 0.155
 
-%description -n	%{libasm}
+%description -n %{libasm}
 Included are the helper library which implement machine-specific ELF handling.
 
 %package -n %{libdw}
@@ -47,7 +49,7 @@ Summary:	Libraries to read and write ELF files
 Group:		System/Libraries
 Obsoletes:	%{libname} < 0.155
 
-%description -n	%{libdw}
+%description -n %{libdw}
 Included are the helper library which implement DWARF ELF handling.
 
 %package -n %{libelf}
@@ -58,7 +60,7 @@ Provides:	%{libname} = %{EVRD}
 Requires:	%{libdw} = %{EVRD}
 Requires:	%{libasm} = %{EVRD}
 
-%description -n	%{libelf}
+%description -n %{libelf}
 This package provides DSOs which allow reading and writing ELF files
 on a high level.  Third party programs depend on this package to read
 internals of ELF files.  The programs of the elfutils package use it
@@ -72,7 +74,7 @@ Requires:	%{libdw} = %{EVRD}
 Requires:	%{libelf} = %{EVRD}
 Provides:	%{name}-devel
 
-%description -n	%{devname}
+%description -n %{devname}
 This package contains the headers and dynamic libraries to create
 applications for handling compiled objects.
 
@@ -81,13 +83,13 @@ applications for handling compiled objects.
    * libebl provides some higher-level ELF access functionality.
    * libasm provides a programmable assembler interface.
 
-%package -n	%{static}
+%package -n %{static}
 Summary:	Static libraries for development with libelfutils
 Group:		Development/Other
 Requires:	%{devname} = %{EVRD}
 Provides:	%{name}-static-devel
 
-%description -n	%{static}
+%description -n %{static}
 This package contains the static libraries to create applications for
 handling compiled objects.
 
@@ -103,7 +105,7 @@ export CC="gcc"
 export CXX="g++"
 
 mkdir -p build-%{_target_platform}
-pushd build-%{_target_platform}
+cd build-%{_target_platform}
 
 # [pixel] libld_elf_i386.so is quite weird, could be dropped? workarounding for now...
 %define _disable_ld_no_undefined 1
@@ -119,7 +121,7 @@ CFLAGS="%{optflags}" CPPFLAGS="%{optflags}" LDFLAGS="%{ldflags}" %configure \
 	--with-lzma
 
 %make
-popd
+cd -
 
 # (tpg) somehow it stucks on x86_64 and i586
 %ifarch %{armx}
