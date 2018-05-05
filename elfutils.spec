@@ -11,12 +11,12 @@
 %define _program_prefix eu-
 %define _disable_lto 1
 
-%global optflags %{optflags} -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong
+%global optflags %{optflags} -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -Wno-error
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
 Version:	0.170
-Release:	3
+Release:	4
 License:	GPLv2+
 Group:		Development/Other
 Url:		https://sourceware.org/elfutils/
@@ -114,33 +114,23 @@ autoreconf -fi
 export CC="gcc"
 export CXX="g++"
 
-mkdir -p build-%{_target_platform}
-cd build-%{_target_platform}
-
-# [pixel] libld_elf_i386.so is quite weird, could be dropped? workarounding for now...
-%define _disable_ld_no_undefined 1
-
-%global optflags %{optflags} -Wno-error
-
-CONFIGURE_TOP=.. \
-CFLAGS="%{optflags}" CPPFLAGS="%{optflags}" LDFLAGS="%{ldflags}" %configure \
+%configure \
 	%{?_program_prefix: --program-prefix=%{_program_prefix}} \
 	--disable-thread-safety \
 	--with-zlib \
 	--with-bzlib \
 	--with-lzma
 
-%make
-cd -
+%make_build
 
 # (tpg) somehow it stucks on x86_64 and i586
 %ifarch %{armx}
 %check
-%make -C build-%{_target_platform} check || true
+make check || true
 %endif
 
 %install
-%makeinstall_std -C build-%{_target_platform}
+%make_install
 
 mkdir %{buildroot}/%{_lib}
 mv %{buildroot}%{_libdir}/libelf.so.%{major} %{buildroot}%{_libdir}/libelf-%{version}.so %{buildroot}/%{_lib}
