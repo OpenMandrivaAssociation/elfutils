@@ -22,14 +22,7 @@ Group:		Development/Other
 Url:		https://sourceware.org/elfutils/
 Source0:	ftp://sourceware.org/pub/elfutils/%{version}/%{name}-%{version}.tar.bz2
 # (tpg) fedora patches
-Patch1:		elfutils-0.170-dwarf_aggregate_size.patch
-Patch2:		elfutils-0.170-sys-ptrace.patch
-Patch3:		elfutils-0.170-core-pid.patch
-Patch4:		elfutils-0.170-elf_sync.patch
-Patch5:		elfutils-0.170-new-notes-hack.patch
-Patch6:		elfutils-0.170-GNU_variable_value.patch
-Patch7:		elfutils-0.170-locviews.patch
-Patch8:		elfutils-0.170-unwind.patch
+Patch1:		https://src.fedoraproject.org/cgit/rpms/elfutils.git/plain/elfutils-0.171-new-notes-hack.patch
 
 BuildRequires:	bison
 BuildRequires:	flex
