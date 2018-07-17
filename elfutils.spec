@@ -115,7 +115,7 @@ export CXX="g++"
 	--with-bzlib \
 	--with-lzma
 
-%make_build
+%make
 
 # (tpg) somehow it stucks on x86_64 and i586
 %ifarch %{armx}
@@ -124,7 +124,7 @@ make check || true
 %endif
 
 %install
-%make_install
+%makeinstall_std
 
 mkdir %{buildroot}/%{_lib}
 mv %{buildroot}%{_libdir}/libelf.so.%{major} %{buildroot}%{_libdir}/libelf-%{version}.so %{buildroot}/%{_lib}
