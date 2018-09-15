@@ -16,7 +16,7 @@
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
-Version:	0.173
+Version:	0.174
 Release:	1
 License:	GPLv2+
 Group:		Development/Other
@@ -25,9 +25,10 @@ Source0:	ftp://sourceware.org/pub/elfutils/%{version}/%{name}-%{version}.tar.bz2
 # (tpg) fedora patches
 Patch1:		https://src.fedoraproject.org/cgit/rpms/elfutils.git/plain/elfutils-0.173-new-notes-hack.patch
 
+BuildRequires:	gcc
 BuildRequires:	bison
 BuildRequires:	flex
-BuildRequires:	bzip2-devel
+BuildRequires:	pkgconfig(bzip2)
 BuildRequires:	gettext-devel
 BuildRequires:	pkgconfig(liblzma)
 BuildRequires:	pkgconfig(zlib)
@@ -98,8 +99,7 @@ This package contains the static libraries to create applications for
 handling compiled objects.
 
 %prep
-%setup -q
-%apply_patches
+%autosetup -p1
 autoreconf -fi
 
 %build
