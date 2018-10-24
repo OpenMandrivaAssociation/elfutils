@@ -21,7 +21,7 @@ Release:	1
 License:	GPLv2+
 Group:		Development/Other
 Url:		https://sourceware.org/elfutils/
-Source0:	ftp://sourceware.org/pub/elfutils/%{version}/%{name}-%{version}.tar.bz2
+Source0:	https://sourceware.org/elfutils/ftp/%{version}/%{name}-%{version}.tar.bz2
 # (tpg) fedora patches
 Patch1:		https://src.fedoraproject.org/cgit/rpms/elfutils.git/plain/elfutils-0.173-new-notes-hack.patch
 
