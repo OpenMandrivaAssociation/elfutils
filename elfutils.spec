@@ -16,18 +16,12 @@
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
-Version:	0.174
-Release:	3
+Version:	0.175
+Release:	1
 License:	GPLv2+
 Group:		Development/Other
 Url:		https://sourceware.org/elfutils/
 Source0:	https://sourceware.org/elfutils/ftp/%{version}/%{name}-%{version}.tar.bz2
-# (tpg) fedora patches
-Patch1:		https://src.fedoraproject.org/cgit/rpms/elfutils.git/plain/elfutils-0.173-new-notes-hack.patch
-Patch2:		elfutils-0.174-strip-unstrip-group.patch
-Patch3:		elfutils-0.174-libdwfl-sanity-check-core-reads.patch
-Patch4:		elfutils-0.174-size-rec-ar.patch
-Patch5:		elfutils-0.174-ar-sh_entsize-zero.patch
 
 BuildRequires:	gcc
 BuildRequires:	bison
