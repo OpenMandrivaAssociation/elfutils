@@ -9,6 +9,9 @@
 %define static %mklibname %{name} -d -s
 
 %define _program_prefix eu-
+# (tpg) 2019-04-18 looks like it still does not work with binutils-2.32
+# BUILDSTDERR: stack.c:590: error: undefined reference to 'dwfl_core_file_report'
+%define _disable_lto 1
 %global __provides_exclude ^libebl_.*\\.so.*$
 
 %global optflags %{optflags} -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -Wno-error
