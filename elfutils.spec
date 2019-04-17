@@ -9,7 +9,6 @@
 %define static %mklibname %{name} -d -s
 
 %define _program_prefix eu-
-%define _disable_lto 1
 %global __provides_exclude ^libebl_.*\\.so.*$
 
 %global optflags %{optflags} -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -Wno-error
@@ -17,7 +16,7 @@
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
 Version:	0.176
-Release:	1
+Release:	2
 License:	GPLv2+
 Group:		Development/Other
 Url:		https://sourceware.org/elfutils/
