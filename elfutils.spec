@@ -14,11 +14,11 @@
 %define _disable_lto 1
 %global __provides_exclude ^libebl_.*\\.so.*$
 
-%global optflags %{optflags} -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -Wno-error
+%global optflags %{optflags} -Os -fstack-protector-strong -Wno-error
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
-Version:	0.177
+Version:	0.178
 Release:	1
 License:	GPLv2+
 Group:		Development/Other
@@ -110,6 +110,7 @@ export CXX="g++"
 
 %configure \
 	%{?_program_prefix: --program-prefix=%{_program_prefix}} \
+	--disable-debuginfod \
 	--disable-thread-safety \
 	--with-zlib \
 	--with-bzlib \
