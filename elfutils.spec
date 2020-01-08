@@ -136,8 +136,6 @@ ln -srf %{buildroot}/%{_lib}/libelf.so.%{major} %{buildroot}%{_libdir}/libelf.so
 %files -f %{name}.lang
 %doc NOTES README NEWS TODO
 %{_bindir}/eu-*
-%dir %{_libdir}/elfutils
-%{_libdir}/elfutils/lib*.so
 
 %files -n %{libelf}
 /%{_lib}/libelf-%{version}.so
