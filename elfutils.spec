@@ -136,6 +136,7 @@ ln -srf %{buildroot}/%{_lib}/libelf.so.%{major} %{buildroot}%{_libdir}/libelf.so
 %files -f %{name}.lang
 %doc NOTES README NEWS TODO
 %{_bindir}/eu-*
+%{_mandir}/man1/eu-*.1.*
 
 %files -n %{libelf}
 /%{_lib}/libelf-%{version}.so
@@ -160,6 +161,7 @@ ln -srf %{buildroot}/%{_lib}/libelf.so.%{major} %{buildroot}%{_libdir}/libelf.so
 %{_libdir}/libdw.so
 %{_libdir}/libasm.so
 %{_libdir}/pkgconfig/*.pc
+%{_mandir}/man3/elf_*.3.*
 
 %files -n %{static}
 %{_libdir}/*.a
