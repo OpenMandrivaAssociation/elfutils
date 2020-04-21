@@ -24,16 +24,6 @@ License:	GPLv2+
 Group:		Development/Other
 Url:		https://sourceware.org/elfutils/
 Source0:	https://sourceware.org/elfutils/ftp/%{version}/%{name}-%{version}.tar.bz2
-
-# Patches
-Patch1: elfutils-0.178-pt-gnu-prop.patch
-Patch2: elfutils-0.178-debuginfod-no-cache.patch
-Patch3: elfutils-0.178-curl-code-gcc-10.patch
-Patch4: elfutils-0.178-compressed-vmlinuz.patch
-Patch5: elfutils-0.178-debuginfod-timeoutprogress.patch
-Patch6: elfutils-0.178-libasm-ebl.patch
-Patch7: elfutils-0.178-gcc10-null-dereference.patch
-
 BuildRequires:	gcc
 BuildRequires:	bison
 BuildRequires:	flex
