@@ -22,15 +22,15 @@
 %define _program_prefix eu-
 # (tpg) 2019-04-18 looks like it still does not work with binutils-2.32
 # BUILDSTDERR: stack.c:590: error: undefined reference to 'dwfl_core_file_report'
-%define _disable_lto 1
+#define _disable_lto 1
 %global __provides_exclude ^libebl_.*\\.so.*$
 
 %global optflags %{optflags} -Os -fstack-protector-strong -Wno-error
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
-Version:	0.179
-Release:	2
+Version:	0.180
+Release:	1
 License:	GPLv2+
 Group:		Development/Other
 Url:		https://sourceware.org/elfutils/
