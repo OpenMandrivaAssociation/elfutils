@@ -170,8 +170,9 @@ autoreconf -fi
 
 # (tpg) use gcc, because clang fails to build it because of VLAIS
 # https://wiki.openmandriva.org/en/Packages_forcing_gcc_use
-#export CC="gcc"
-#export CXX="g++"
+# 2020-06-15 still fails with clang
+export CC="gcc"
+export CXX="g++"
 export CONFIGURE_TOP="$(pwd)"
 
 %if %{with compat32}
