@@ -20,9 +20,6 @@
 %define static32 lib%{name}-static-devel
 
 %define _program_prefix eu-
-# (tpg) 2019-04-18 looks like it still does not work with binutils-2.32
-# BUILDSTDERR: stack.c:590: error: undefined reference to 'dwfl_core_file_report'
-#define _disable_lto 1
 %global __provides_exclude ^libebl_.*\\.so.*$
 
 %global optflags %{optflags} -Os -fstack-protector-strong -Wno-error
@@ -173,8 +170,8 @@ autoreconf -fi
 
 # (tpg) use gcc, because clang fails to build it because of VLAIS
 # https://wiki.openmandriva.org/en/Packages_forcing_gcc_use
-export CC="gcc"
-export CXX="g++"
+#export CC="gcc"
+#export CXX="g++"
 export CONFIGURE_TOP="$(pwd)"
 
 %if %{with compat32}
