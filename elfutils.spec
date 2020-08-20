@@ -22,12 +22,13 @@
 %define _program_prefix eu-
 %global __provides_exclude ^libebl_.*\\.so.*$
 
-%global optflags %{optflags} -Os -fstack-protector-strong -Wno-error
+# (tpg) 2020-08-20 it only compiles with GCC so add -flto=auto -ffat-lto-objects
+%global optflags %{optflags} -Os -fstack-protector-strong -Wno-error -flto=auto -ffat-lto-objects
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
 Version:	0.180
-Release:	1
+Release:	2
 License:	GPLv2+
 Group:		Development/Other
 Url:		https://sourceware.org/elfutils/
