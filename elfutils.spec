@@ -27,7 +27,7 @@
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
 Version:	0.180
-Release:	2
+Release:	3
 License:	GPLv2+
 Group:		Development/Other
 Url:		https://sourceware.org/elfutils/
@@ -223,6 +223,9 @@ make check || true
 mkdir %{buildroot}/%{_lib}
 mv %{buildroot}%{_libdir}/libelf.so.%{major} %{buildroot}%{_libdir}/libelf-%{version}.so %{buildroot}/%{_lib}
 ln -srf %{buildroot}/%{_lib}/libelf.so.%{major} %{buildroot}%{_libdir}/libelf.so
+
+# (tpg) strip out LTO from static objects
+find "%{buildroot}" -type f -name '*.[ao]' -exec sh -c "/usr/bin/strip -p -R .gnu.lto_* -R .gnu.debuglto_* -N __gnu_lto_v1 {}" \;
 
 %find_lang %{name}
 
