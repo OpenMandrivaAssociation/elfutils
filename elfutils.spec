@@ -22,8 +22,7 @@
 %define _program_prefix eu-
 %global __provides_exclude ^libebl_.*\\.so.*$
 
-# (tpg) 2020-08-20 it only compiles with GCC so add -flto=auto -ffat-lto-objects
-%global optflags %{optflags} -Os -fstack-protector-strong -Wno-error -flto=auto -ffat-lto-objects
+%global optflags %{optflags} -Os -fstack-protector-strong -Wno-error
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
@@ -191,6 +190,10 @@ cd ..
 
 mkdir build
 cd build
+# (tpg) 2020-08-20 it only compiles with GCC so add -flto=auto -ffat-lto-objects
+export CFLAGS="%{build_cflags} -flto=auto -ffat-lto-objects"
+export LDFLAGS="%{build_ldflags} -flto=auto -ffat-lto-objects"
+
 %configure \
 	%{?_program_prefix: --program-prefix=%{_program_prefix}} \
 	--disable-debuginfod \
