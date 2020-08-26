@@ -19,19 +19,28 @@
 %define dev32name lib%{name}-devel
 %define static32 lib%{name}-static-devel
 
+# This package uses top level ASM constructs which are incompatible with LTO.
+# Top level ASMs are often used to implement symbol versioning.  gcc-10
+# introduces a new mechanism for symbol versioning which works with LTO.
+# Converting packages to use that mechanism instead of toplevel ASMs is
+# recommended.
+# Disable LTO
+%define _disable_lto 1
+
 %define _program_prefix eu-
 %global __provides_exclude ^libebl_.*\\.so.*$
 
-%global optflags %{optflags} -Os -fstack-protector-strong -Wno-error
+%global optflags %{optflags} -Os -fstack-protector-strong -Wno-error -fexceptions
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
 Version:	0.180
-Release:	3
+Release:	4
 License:	GPLv2+
 Group:		Development/Other
 Url:		https://sourceware.org/elfutils/
 Source0:	https://sourceware.org/elfutils/ftp/%{version}/%{name}-%{version}.tar.bz2
+Patch0:		elfutils-0.180-shf-compressed.patch
 BuildRequires:	gcc
 BuildRequires:	bison
 BuildRequires:	flex
@@ -190,10 +199,6 @@ cd ..
 
 mkdir build
 cd build
-# (tpg) 2020-08-20 it only compiles with GCC so add -flto=auto -ffat-lto-objects
-export CFLAGS="%{build_cflags} -flto=auto -ffat-lto-objects"
-export LDFLAGS="%{build_ldflags} -flto=auto -ffat-lto-objects"
-
 %configure \
 	%{?_program_prefix: --program-prefix=%{_program_prefix}} \
 	--disable-debuginfod \
@@ -223,9 +228,6 @@ make check || true
 mkdir %{buildroot}/%{_lib}
 mv %{buildroot}%{_libdir}/libelf.so.%{major} %{buildroot}%{_libdir}/libelf-%{version}.so %{buildroot}/%{_lib}
 ln -srf %{buildroot}/%{_lib}/libelf.so.%{major} %{buildroot}%{_libdir}/libelf.so
-
-# (tpg) strip out LTO from static objects
-find "%{buildroot}" -type f -name '*.[ao]' -exec sh -c "/usr/bin/strip -p -R .gnu.lto_* -R .gnu.debuglto_* -N __gnu_lto_v1 {}" \;
 
 %find_lang %{name}
 
