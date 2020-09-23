@@ -191,6 +191,7 @@ cd build32
 %configure32 \
 	%{?_program_prefix: --program-prefix=%{_program_prefix}} \
 	--disable-debuginfod \
+	--disable-libdebuginfod \
 	--disable-thread-safety \
 	--with-zlib \
 	--with-bzlib \
@@ -203,6 +204,7 @@ cd build
 %configure \
 	%{?_program_prefix: --program-prefix=%{_program_prefix}} \
 	--disable-debuginfod \
+	--disable-libdebuginfod \
 	--disable-thread-safety \
 	--with-zlib \
 	--with-bzlib \
