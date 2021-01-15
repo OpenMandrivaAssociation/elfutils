@@ -34,13 +34,12 @@
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
-Version:	0.181
+Version:	0.182
 Release:	1
 License:	GPLv2+
 Group:		Development/Other
 Url:		https://sourceware.org/elfutils/
 Source0:	https://sourceware.org/elfutils/ftp/%{version}/%{name}-%{version}.tar.bz2
-Patch0:		https://src.fedoraproject.org/rpms/elfutils/raw/master/f/elfutils-0.181-zstd.patch
 BuildRequires:	gcc
 BuildRequires:	bison
 BuildRequires:	flex
