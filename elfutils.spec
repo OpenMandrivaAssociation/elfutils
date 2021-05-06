@@ -41,6 +41,9 @@ BuildRequires:	pkgconfig(liblzma)
 BuildRequires:	pkgconfig(zlib)
 BuildRequires:	pkgconfig(libzstd)
 BuildRequires:	pkgconfig(libcurl)
+BuildRequires:	pkgconfig(libmicrohttpd)
+BuildRequires:	pkgconfig(sqlite3)
+BuildRequires:	pkgconfig(libarchive)
 Obsoletes:	%{libname} < 0.155
 %if %{with compat32}
 BuildRequires:	gcc
