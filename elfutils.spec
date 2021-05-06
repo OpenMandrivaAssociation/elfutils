@@ -19,18 +19,12 @@
 %define dev32name lib%{name}-devel
 %define static32 lib%{name}-static-devel
 
-# This package uses top level ASM constructs which are incompatible with LTO.
-# Top level ASMs are often used to implement symbol versioning.  gcc-10
-# introduces a new mechanism for symbol versioning which works with LTO.
-# Converting packages to use that mechanism instead of toplevel ASMs is
-# recommended.
-# Disable LTO
-%define _disable_lto 1
-
 %define _program_prefix eu-
 %global __provides_exclude ^libebl_.*\\.so.*$
 
-%global optflags %{optflags} -Os -fstack-protector-strong -Wno-error -fexceptions
+# FIXME -gdwarf-4 is a workaround for debuginfo failing to detect
+# source files when DWARF-5 is used
+%global optflags %{optflags} -Os -fstack-protector-strong -Wno-error -fexceptions -gdwarf-4
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
