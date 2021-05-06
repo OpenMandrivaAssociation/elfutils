@@ -11,6 +11,7 @@
 %define libasm %mklibname asm %{major}
 %define libdw %mklibname dw %{major}
 %define libelf %mklibname elf %{major}
+%define libdebuginfod %mklibname debuginfod %{major}
 %define devname %mklibname %{name} -d
 %define static %mklibname %{name} -d -s
 %define lib32asm libasm%{major}
@@ -29,7 +30,7 @@
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
 Version:	0.183
-Release:	1
+Release:	2
 License:	GPLv2+
 Group:		Development/Other
 Url:		https://sourceware.org/elfutils/
@@ -85,6 +86,20 @@ This package provides DSOs which allow reading and writing ELF files
 on a high level.  Third party programs depend on this package to read
 internals of ELF files.  The programs of the elfutils package use it
 also to generate new ELF files.
+
+%package -n %{libdebuginfod}
+Summary:	Libraries to talk to debuginfod servers
+Group:		System/Libraries
+
+%description -n %{libdebuginfod}
+Libraries to talk to debuginfod servers
+
+%package -n debuginfod
+Summary:	Debuginfo server
+Group:		Development/Other
+
+%description -n debuginfod
+Debuginfo server
 
 %package -n %{devname}
 Summary:	Development libraries to handle compiled objects
@@ -196,11 +211,12 @@ mkdir build
 cd build
 %configure \
 	%{?_program_prefix: --program-prefix=%{_program_prefix}} \
-	--disable-debuginfod \
-	--disable-libdebuginfod \
+	--enable-debuginfod \
+	--enable-libdebuginfod \
 	--disable-thread-safety \
 	--with-zlib \
 	--with-bzlib \
+	--with-zstd \
 	--with-lzma
 
 %build
@@ -259,6 +275,18 @@ ln -srf %{buildroot}/%{_lib}/libelf.so.%{major} %{buildroot}%{_libdir}/libelf.so
 
 %files -n %{static}
 %{_libdir}/*.a
+
+%files -n debuginfod
+%{_sysconfdir}/profile.d/debuginfod.csh
+%{_sysconfdir}/profile.d/debuginfod.sh
+%{_bindir}/debuginfod
+%{_bindir}/debuginfod-find
+%{_mandir}/*/debuginfod*
+
+%files -n %{libdebuginfod}
+%{_libdir}/libdebuginfod-0.183.so
+%{_libdir}/libdebuginfod.so
+%{_libdir}/libdebuginfod.so.1
 
 %if %{with compat32}
 %files -n %{lib32elf}
