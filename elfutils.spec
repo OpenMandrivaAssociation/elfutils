@@ -23,9 +23,7 @@
 %define _program_prefix eu-
 %global __provides_exclude ^libebl_.*\\.so.*$
 
-# FIXME -gdwarf-4 is a workaround for debuginfo failing to detect
-# source files when DWARF-5 is used
-%global optflags %{optflags} -Os -fstack-protector-strong -Wno-error -fexceptions -gdwarf-4
+%global optflags %{optflags} -Os -fstack-protector-strong -Wno-error -fexceptions
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
@@ -42,6 +40,7 @@ BuildRequires:	gettext-devel
 BuildRequires:	pkgconfig(liblzma)
 BuildRequires:	pkgconfig(zlib)
 BuildRequires:	pkgconfig(libzstd)
+BuildRequires:	pkgconfig(libcurl)
 Obsoletes:	%{libname} < 0.155
 %if %{with compat32}
 BuildRequires:	gcc
