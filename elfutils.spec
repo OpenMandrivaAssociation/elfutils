@@ -33,6 +33,8 @@ License:	GPLv2+
 Group:		Development/Other
 Url:		https://sourceware.org/elfutils/
 Source0:	https://sourceware.org/elfutils/ftp/%{version}/%{name}-%{version}.tar.bz2
+Patch100:	elfutils.git-c6e1f664254a8ae16e2e6d726c5159ecb7f27d3b.patch
+
 BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	pkgconfig(bzip2)
