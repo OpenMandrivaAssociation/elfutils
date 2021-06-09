@@ -23,6 +23,14 @@
 %define _program_prefix eu-
 %global __provides_exclude ^libebl_.*\\.so.*$
 
+# This package uses top level ASM constructs which are incompatible with LTO.
+# Top level ASMs are often used to implement symbol versioning.  gcc-10
+# introduces a new mechanism for symbol versioning which works with LTO.
+# Converting packages to use that mechanism instead of toplevel ASMs is
+# recommended.
+# Disable LTO
+%define _disable_lto 1
+
 %global optflags %{optflags} -Os -fstack-protector-strong -Wno-error -fexceptions
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
@@ -288,7 +296,7 @@ ln -srf %{buildroot}/%{_lib}/libelf.so.%{major} %{buildroot}%{_libdir}/libelf.so
 %{_mandir}/*/debuginfod*
 
 %files -n %{libdebuginfod}
-%{_libdir}/libdebuginfod-0.183.so
+%{_libdir}/libdebuginfod-%{version}.so
 %{_libdir}/libdebuginfod.so
 %{_libdir}/libdebuginfod.so.1
 
