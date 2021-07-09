@@ -36,11 +36,13 @@
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
 Version:	0.185
-Release:	1
+Release:	2
 License:	GPLv2+
 Group:		Development/Other
 Url:		https://sourceware.org/elfutils/
 Source0:	https://sourceware.org/elfutils/ftp/%{version}/%{name}-%{version}.tar.bz2
+# (tpg) fix build with LLVM/clang
+Patch0:		elfutils-0.185-clang.patch
 Patch100:	elfutils.git-c6e1f664254a8ae16e2e6d726c5159ecb7f27d3b.patch
 
 BuildRequires:	bison
@@ -196,13 +198,8 @@ handling compiled objects.
 
 %prep
 %autosetup -p1
-autoreconf -fi
 
-# (tpg) use gcc, because clang fails to build it because of VLAIS
-# https://wiki.openmandriva.org/en/Packages_forcing_gcc_use
-# 2021-05-05 still fails with clang
-export CC="gcc"
-export CXX="g++"
+autoreconf -fi
 export CONFIGURE_TOP="$(pwd)"
 
 %if %{with compat32}
