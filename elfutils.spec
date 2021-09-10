@@ -255,7 +255,7 @@ ln -srf %{buildroot}/%{_lib}/libelf.so.%{major} %{buildroot}%{_libdir}/libelf.so
 %files -f %{name}.lang
 %doc NOTES README NEWS TODO
 %{_bindir}/eu-*
-%{_mandir}/man1/eu-*.1.*
+%doc %{_mandir}/man1/eu-*.1.*
 
 %files -n %{libelf}
 /%{_lib}/libelf-%{version}.so
@@ -280,7 +280,7 @@ ln -srf %{buildroot}/%{_lib}/libelf.so.%{major} %{buildroot}%{_libdir}/libelf.so
 %{_libdir}/libdw.so
 %{_libdir}/libasm.so
 %{_libdir}/pkgconfig/*.pc
-%{_mandir}/man3/elf_*.3.*
+%doc %{_mandir}/man3/elf_*.3.*
 
 %files -n %{static}
 %{_libdir}/*.a
@@ -290,7 +290,7 @@ ln -srf %{buildroot}/%{_lib}/libelf.so.%{major} %{buildroot}%{_libdir}/libelf.so
 %{_sysconfdir}/profile.d/debuginfod.sh
 %{_bindir}/debuginfod
 %{_bindir}/debuginfod-find
-%{_mandir}/*/debuginfod*
+%doc %{_mandir}/*/debuginfod*
 
 %files -n %{libdebuginfod}
 %{_libdir}/libdebuginfod-%{version}.so
