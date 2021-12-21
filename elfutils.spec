@@ -23,27 +23,16 @@
 %define _program_prefix eu-
 %global __provides_exclude ^libebl_.*\\.so.*$
 
-# This package uses top level ASM constructs which are incompatible with LTO.
-# Top level ASMs are often used to implement symbol versioning.  gcc-10
-# introduces a new mechanism for symbol versioning which works with LTO.
-# Converting packages to use that mechanism instead of toplevel ASMs is
-# recommended.
-# Disable LTO
-%define _disable_lto 1
-
 %global optflags %{optflags} -Os -fstack-protector-strong -Wno-error -fexceptions
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
-Version:	0.185
-Release:	2
+Version:	0.186
+Release:	1
 License:	GPLv2+
 Group:		Development/Other
 Url:		https://sourceware.org/elfutils/
 Source0:	https://sourceware.org/elfutils/ftp/%{version}/%{name}-%{version}.tar.bz2
-# (tpg) fix build with LLVM/clang
-Patch0:		elfutils-0.185-clang.patch
-Patch100:	elfutils.git-c6e1f664254a8ae16e2e6d726c5159ecb7f27d3b.patch
 
 BuildRequires:	bison
 BuildRequires:	flex
