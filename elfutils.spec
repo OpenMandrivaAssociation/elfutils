@@ -28,7 +28,7 @@
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
 Version:	0.186
-Release:	1
+Release:	2
 License:	GPLv2+
 Group:		Development/Other
 Url:		https://sourceware.org/elfutils/
@@ -235,10 +235,6 @@ make check || true
 %endif
 %make_install -C build
 
-mkdir %{buildroot}/%{_lib}
-mv %{buildroot}%{_libdir}/libelf.so.%{major} %{buildroot}%{_libdir}/libelf-%{version}.so %{buildroot}/%{_lib}
-ln -srf %{buildroot}/%{_lib}/libelf.so.%{major} %{buildroot}%{_libdir}/libelf.so
-
 %find_lang %{name}
 
 %files -f %{name}.lang
@@ -247,8 +243,8 @@ ln -srf %{buildroot}/%{_lib}/libelf.so.%{major} %{buildroot}%{_libdir}/libelf.so
 %doc %{_mandir}/man1/eu-*.1.*
 
 %files -n %{libelf}
-/%{_lib}/libelf-%{version}.so
-/%{_lib}/libelf*.so.%{major}*
+%{_libdir}/libelf-%{version}.so
+%{_libdir}/libelf*.so.%{major}*
 
 %files -n %{libdw}
 %{_libdir}/libdw-%{version}.so
