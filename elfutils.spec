@@ -27,8 +27,8 @@
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
-Version:	0.186
-Release:	2
+Version:	0.187
+Release:	1
 License:	GPLv2+
 Group:		Development/Other
 Url:		https://sourceware.org/elfutils/
@@ -49,8 +49,6 @@ Obsoletes:	%{libname} < 0.155
 %if %{with compat32}
 BuildRequires:	gcc
 BuildRequires:	devel(libz)
-BuildRequires:	devel(liblzma)
-BuildRequires:	devel(libbz2)
 %endif
 
 %description
@@ -95,14 +93,14 @@ Summary:	Libraries to talk to debuginfod servers
 Group:		System/Libraries
 
 %description -n %{libdebuginfod}
-Libraries to talk to debuginfod servers
+Libraries to talk to debuginfod servers.
 
 %package -n debuginfod
 Summary:	Debuginfo server
 Group:		Development/Other
 
 %description -n debuginfod
-Debuginfo server
+Debuginfo server.
 
 %package -n %{devname}
 Summary:	Development libraries to handle compiled objects
@@ -200,8 +198,8 @@ cd build32
 	--disable-libdebuginfod \
 	--disable-thread-safety \
 	--with-zlib \
-	--with-bzlib \
-	--with-lzma
+	--without-bzlib \
+	--without-lzma
 cd ..
 %endif
 
