@@ -51,6 +51,7 @@ BuildRequires:	pkgconfig(libarchive)
 Obsoletes:	%{libname} < 0.155
 %if %{with compat32}
 BuildRequires:	gcc
+BuildRequires:	libc6
 BuildRequires:	devel(libz)
 %endif
 
