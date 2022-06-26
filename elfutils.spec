@@ -11,7 +11,10 @@
 %define libasm %mklibname asm %{major}
 %define libdw %mklibname dw %{major}
 %define libelf %mklibname elf %{major}
-%define libdebuginfod %mklibname debuginfod %{major}
+# NOTE: We have to name this "incorrectly" for now
+# since ABF moves filemanes containing "debuginfo"
+# to the separate debug repository
+%define libdebuginfod %mklibname dbginfod %{major}
 %define devname %mklibname %{name} -d
 %define static %mklibname %{name} -d -s
 %define lib32asm libasm%{major}
@@ -95,11 +98,12 @@ Group:		System/Libraries
 %description -n %{libdebuginfod}
 Libraries to talk to debuginfod servers.
 
-%package -n debuginfod
+%package -n dbginfod
 Summary:	Debuginfo server
 Group:		Development/Other
+Provides:	debuginfod = %{EVRD}
 
-%description -n debuginfod
+%description -n dbginfod
 Debuginfo server.
 
 %package -n %{devname}
@@ -268,7 +272,7 @@ make check || true
 %files -n %{static}
 %{_libdir}/*.a
 
-%files -n debuginfod
+%files -n dbginfod
 %{_sysconfdir}/profile.d/debuginfod.csh
 %{_sysconfdir}/profile.d/debuginfod.sh
 %{_bindir}/debuginfod
