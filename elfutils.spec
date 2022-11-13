@@ -26,11 +26,11 @@
 %define _program_prefix eu-
 %global __provides_exclude ^libebl_.*\\.so.*$
 
-%global optflags %{optflags} -Os -fstack-protector-strong -Wno-error -fexceptions
+%global optflags %{optflags} -Oz -fstack-protector-strong -Wno-error
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
-Version:	0.187
+Version:	0.188
 Release:	1
 License:	GPLv2+
 Group:		Development/Other
