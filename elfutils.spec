@@ -31,7 +31,7 @@
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
 Version:	0.189
-Release:	1
+Release:	2
 License:	GPLv2+
 Group:		Development/Other
 Url:		https://sourceware.org/elfutils/
