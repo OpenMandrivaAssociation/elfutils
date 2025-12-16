@@ -57,7 +57,13 @@ Obsoletes:	%{libname} < 0.155
 %if %{with compat32}
 BuildRequires:	gcc
 BuildRequires:	libc6
+BuildRequires:	devel(libarchive)
 BuildRequires:	devel(libz)
+BuildRequires:	devel(libssl)
+BuildRequires:	devel(libbz2)
+BuildRequires:	devel(libcrypto)
+BuildRequires:	devel(liblzma)
+BuildRequires:	devel(libzstd)
 %endif
 
 %description
