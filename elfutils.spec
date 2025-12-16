@@ -39,6 +39,10 @@ Source0:	https://sourceware.org/elfutils/ftp/%{version}/%{name}-%{version}.tar.b
 
 BuildRequires:	bison
 BuildRequires:	flex
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	pkgconfig(bzip2)
 BuildRequires:	gettext-devel
 BuildRequires:	pkgconfig(liblzma)
