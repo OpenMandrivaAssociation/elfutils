@@ -52,6 +52,7 @@ BuildRequires:	pkgconfig(libcurl)
 BuildRequires:	pkgconfig(libmicrohttpd)
 BuildRequires:	pkgconfig(sqlite3)
 BuildRequires:	pkgconfig(libarchive)
+BuildRequires:	pkgconfig(json-c)
 Obsoletes:	%{libname} < 0.155
 %if %{with compat32}
 BuildRequires:	gcc
