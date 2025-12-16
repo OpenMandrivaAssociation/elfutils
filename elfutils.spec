@@ -30,8 +30,8 @@
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
-Version:	0.191
-Release:	2
+Version:	0.194
+Release:	1
 License:	GPLv2+
 Group:		Development/Other
 Url:		https://sourceware.org/elfutils/
@@ -222,7 +222,7 @@ cd build
 
 %build
 %if %{with compat32}
-%make_build -C build32
+%make_build -C build32 libarchive_LIBS="-larchive -lssl -lbz2 -lcrypto -llzma -lz -lzstd"
 %endif
 %make_build -C build
 
@@ -234,7 +234,7 @@ make check || true
 
 %install
 %if %{with compat32}
-%make_install -C build32
+%make_install -C build32 libarchive_LIBS="-larchive -lssl -lbz2 -lcrypto -llzma -lz -lzstd"
 %endif
 %make_install -C build
 
@@ -298,7 +298,11 @@ done
 %{_libdir}/libdw.so
 %{_libdir}/libasm.so
 %{_libdir}/pkgconfig/*.pc
-%doc %{_mandir}/man3/elf_*.3.*
+%doc %{_mandir}/man3/elf_*.3*
+%doc %{_mandir}/man3/elf32_*.3*
+%doc %{_mandir}/man3/elf64_*.3*
+%doc %{_mandir}/man3/gelf_*.3*
+%doc %{_mandir}/man3/libelf.3*
 
 %files -n %{static}
 %{_libdir}/*.a
@@ -308,6 +312,7 @@ done
 %{_sysconfdir}/profile.d/debuginfod.sh
 %{_bindir}/debuginfod
 %{_bindir}/debuginfod-find
+%{_datadir}/fish/vendor_conf.d/debuginfod.fish
 %doc %{_mandir}/*/debuginfod*
 
 %files -n %{libdebuginfod}
