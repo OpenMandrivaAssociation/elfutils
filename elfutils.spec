@@ -37,6 +37,7 @@ Group:		Development/Other
 Url:		https://sourceware.org/elfutils/
 Source0:	https://sourceware.org/elfutils/ftp/%{version}/%{name}-%{version}.tar.bz2
 
+BuildRequires:	libtool-base
 BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	autoconf
