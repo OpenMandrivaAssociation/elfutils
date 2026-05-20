@@ -30,7 +30,7 @@
 
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
-Version:	0.194
+Version:	0.195
 Release:	1
 License:	GPLv2+
 Group:		Development/Other
@@ -313,7 +313,7 @@ done
 %doc %{_mandir}/man3/elf_*.3*
 %doc %{_mandir}/man3/elf32_*.3*
 %doc %{_mandir}/man3/elf64_*.3*
-%doc %{_mandir}/man3/gelf_*.3*
+%doc %{_mandir}/man3/gelf*.3*
 %doc %{_mandir}/man3/libelf.3*
 
 %files -n %{static}
