@@ -28,6 +28,11 @@
 
 %global optflags %{optflags} -Oz -fstack-protector-strong -Wno-error
 
+%ifarch %{loongarch64}
+# Workaround for crash in dwz when building the package
+%global optflags %{optflags} -gdwarf-4
+%endif
+
 Summary:	A collection of utilities and DSOs to handle compiled objects
 Name:		elfutils
 Version:	0.195
@@ -37,7 +42,6 @@ Group:		Development/Other
 Url:		https://sourceware.org/elfutils/
 Source0:	https://sourceware.org/elfutils/ftp/%{version}/%{name}-%{version}.tar.bz2
 
-BuildRequires:	libtool-base
 BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	autoconf
